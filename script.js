@@ -138,7 +138,7 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     CANVAS — Cursed Energy Particles
+     CANVAS — Cursed Energy Particles (optimized)
      ═══════════════════════════════════════════════════════════ */
   const initCanvas = () => {
     const canvas = fxCanvas;
@@ -147,17 +147,34 @@
     const particles = [];
     const embers = [];
     const COLORS = ['#6ee7ff', '#7c5cff', '#ff4d5e', '#fff'];
+    let canvasVisible = true;
+
+    // adaptive particle count based on screen size + device capability
+    const isMobile = window.matchMedia('(max-width:820px)').matches;
+    const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    const PARTICLE_COUNT = isMobile ? 60 : (isLowPerf ? 90 : 130);
+    const CONNECT_DIST = isMobile ? 70 : 90;
+    const MAX_CONNECTIONS = isMobile ? 3 : 5; // cap per-particle line draws
 
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.8);
+      dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.3 : 1.8);
       W = canvas.offsetWidth;
       H = canvas.offsetHeight;
       canvas.width = W * dpr;
       canvas.height = H * dpr;
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
-    window.addEventListener('resize', resize);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
+
+    // pause rendering when tab hidden (saves battery + CPU)
+    document.addEventListener('visibilitychange', () => {
+      canvasVisible = !document.hidden;
+    });
 
     const spawn = (n) => {
       for (let i = 0; i < n; i++) {
@@ -172,10 +189,11 @@
         });
       }
     };
-    spawn(160);
+    spawn(PARTICLE_COUNT);
 
     let last = 0;
     const animate = (t) => {
+      if (!canvasVisible) { requestAnimationFrame(animate); return; }
       if (!last) last = t;
       const dt = Math.min(24, t - last);
       last = t;
@@ -185,13 +203,16 @@
       // drift toward mouse
       const mx = state.mouse.x;
       const my = state.mouse.y;
+      const mouseActive = state.mouse.moving;
 
+      // batch particle drawing
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         const dx = mx - p.x;
         const dy = my - p.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < 160 && state.mouse.moving) {
+        const dist2 = dx * dx + dy * dy;
+        if (dist2 < 25600 && mouseActive) { // 160^2
+          const dist = Math.sqrt(dist2);
           const f = (160 - dist) / 160;
           p.vx += (dx / dist) * .02 * f;
           p.vy += (dy / dist) * .02 * f;
@@ -209,25 +230,34 @@
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
+      }
 
-        // connect to neighbors
-        for (let j = i + 1; j < particles.length; j++) {
+      // optimized connection pass — early-exit + capped connections
+      ctx.strokeStyle = '#6ee7ff';
+      ctx.lineWidth = .5;
+      const cd2 = CONNECT_DIST * CONNECT_DIST;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        let connections = 0;
+        for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
           const q = particles[j];
-          const d = Math.hypot(p.x - q.x, p.y - q.y);
-          if (d < 90) {
-            ctx.globalAlpha = (1 - d / 90) * .18;
-            ctx.strokeStyle = '#6ee7ff';
-            ctx.lineWidth = .5;
+          const ddx = p.x - q.x;
+          const ddy = p.y - q.y;
+          const d2 = ddx * ddx + ddy * ddy;
+          if (d2 < cd2) {
+            const d = Math.sqrt(d2);
+            ctx.globalAlpha = (1 - d / CONNECT_DIST) * .18;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
+            connections++;
           }
         }
       }
 
-      // embers
-      if (Math.random() < .18) {
+      // embers (throttled on mobile)
+      if (Math.random() < (isMobile ? .08 : .18)) {
         embers.push({
           x: Math.random() * W,
           y: H,
@@ -538,18 +568,22 @@
     const canvas = doCanvas;
     const ctx = canvas.getContext('2d');
     let W, H, dpr;
+    const isMobile = window.matchMedia('(max-width:820px)').matches;
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.6);
+      dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.2 : 1.6);
       W = canvas.offsetWidth; H = canvas.offsetHeight;
       canvas.width = W * dpr; canvas.height = H * dpr;
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
-    window.addEventListener('resize', resize);
+    // note: listener removed on close via clone — keep simple here
+    const onResize = () => resize();
+    window.addEventListener('resize', onResize, { passive: true });
 
     const particles = [];
     const COLORS = [s.c, s.c2, '#fff', '#000'];
-    for (let i = 0; i < 120; i++) {
+    const PCOUNT = isMobile ? 60 : 120;
+    for (let i = 0; i < PCOUNT; i++) {
       particles.push({
         x: Math.random() * W,
         y: Math.random() * H,
@@ -557,22 +591,24 @@
         vy: (Math.random() - .5) * 1.2,
         r: Math.random() * 2.2 + .5,
         a: Math.random() * .6 + .2,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)], // set once
       });
     }
 
     const animate = () => {
       ctx.clearRect(0, 0, W, H);
-      particles.forEach(p => {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         p.vx *= .97; p.vy *= .97;
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > W) p.vx *= -1;
         if (p.y < 0 || p.y > H) p.vy *= -1;
         ctx.globalAlpha = p.a;
-        ctx.fillStyle = COLORS[Math.floor(Math.random() * COLORS.length)];
+        ctx.fillStyle = p.c;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-      });
+      }
       // radial pulse
       const t = performance.now() * .001;
       ctx.save();
@@ -588,6 +624,15 @@
       domainRaf = requestAnimationFrame(animate);
     };
     animate();
+
+    // cleanup resize listener when domain closes
+    const origClose = $('#doClose').onclick;
+    if (origClose) {
+      $('#doClose').onclick = () => {
+        window.removeEventListener('resize', onResize);
+        origClose();
+      };
+    }
   };
 
   /* ═══════════════════════════════════════════════════════════
