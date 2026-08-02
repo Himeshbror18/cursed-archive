@@ -3,84 +3,101 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>呪術廻戦 · JUJUTSU KAISEN — Cursed Energy</title>
-<meta name="description" content="An immersive Jujutsu Kaisen fan experience — cursed energy, domain expansions and the sorcerers who bear them." />
+<title>呪 CURSED ARCHIVE — Shibuya Incident Files</title>
+<meta name="description" content="An immersive Jujutsu Kaisen manga experience — comic panels, domain clashes, Shibuya Incident rules, and the sorcerers who survived it." />
+<meta name="theme-color" content="#0a0a0f" />
+<meta property="og:title" content="呪 CURSED ARCHIVE" />
+<meta property="og:description" content="The Shibuya Incident Files — an interactive JJK manga fan experience." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Serif+JP:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Serif+JP:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Bangers&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%236ee7ff'>呪</text></svg>" />
 </head>
 <body>
 
 <!-- ═══════════ PRELOADER ═══════════ -->
-<div class="preloader" id="preloader">
-  <div class="pre-ring"></div>
-  <div class="pre-ring pre-ring--2"></div>
-  <div class="pre-kanji">呪</div>
-  <div class="pre-bar"><span id="preBar"></span></div>
-  <div class="pre-label">領域展開 <em id="preNum">0</em>%</div>
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-manga">
+    <span class="pre-onoma">ゴゴゴ</span>
+    <div class="pre-kanji">呪</div>
+    <div class="pre-bar"><span id="preBar"></span></div>
+    <div class="pre-label">LOADING SHIBUYA FILES <em id="preNum">0</em>%</div>
+  </div>
 </div>
 
 <!-- ═══════════ CURSOR ═══════════ -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"><span class="cursor-ring__kanji">呪</span></div>
 
-<!-- ═══════════ BACKGROUND LAYERS ═══════════ -->
-<canvas id="fx" class="fx-canvas"></canvas>
-<div class="grain"></div>
-<div class="vignette"></div>
-<div class="scanlines"></div>
+<!-- ═══════════ AMBIENT FX ═══════════ -->
+<canvas id="fx" class="fx-canvas" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
 
-<!-- ═══════════ ENERGY PROGRESS ═══════════ -->
-<div class="energy-rail"><span id="energyBar"></span></div>
+<!-- ═══════════ ENERGY RAIL ═══════════ -->
+<div class="energy-rail" aria-hidden="true"><span id="energyBar"></span></div>
 
 <!-- ═══════════ NAV ═══════════ -->
 <header class="nav" id="nav">
   <a href="#home" class="brand" data-cursor="link">
     <span class="brand__mark">呪</span>
-    <span class="brand__text">JUJUTSU<em>KAISEN</em></span>
+    <span class="brand__text">CURSED<em>ARCHIVE</em></span>
   </a>
   <nav class="nav__links">
-    <a href="#curses" data-cursor="link"><i>01</i>Curses</a>
-    <a href="#sorcerers" data-cursor="link"><i>02</i>Sorcerers</a>
-    <a href="#domains" data-cursor="link"><i>03</i>Domains</a>
-    <a href="#grades" data-cursor="link"><i>04</i>Grades</a>
+    <a href="#index" data-cursor="link"><i>01</i>Curse Index</a>
+    <a href="#vault" data-cursor="link"><i>02</i>Sorcerer Vault</a>
+    <a href="#clash" data-cursor="link"><i>03</i>Domain Clash</a>
+    <a href="#rules" data-cursor="link"><i>04</i>Shibuya Rules</a>
+    <a href="#support" data-cursor="link"><i>05</i>Support</a>
   </nav>
   <button class="nav__burger" id="burger" aria-label="Menu"><span></span><span></span></button>
 </header>
 
-<div class="drawer" id="drawer">
+<div class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer__kanji">術</div>
-  <a href="#curses"><span>01</span>Curses</a>
-  <a href="#sorcerers"><span>02</span>Sorcerers</a>
-  <a href="#domains"><span>03</span>Domains</a>
-  <a href="#grades"><span>04</span>Grades</a>
+  <a href="#index"><span>01</span>Curse Index</a>
+  <a href="#vault"><span>02</span>Sorcerer Vault</a>
+  <a href="#clash"><span>03</span>Domain Clash</a>
+  <a href="#rules"><span>04</span>Shibuya Rules</a>
   <a href="#creed"><span>05</span>Creed</a>
+  <a href="#support"><span>06</span>Support</a>
 </div>
 
 <main>
 
 <!-- ═══════════ HERO ═══════════ -->
 <section class="hero" id="home">
-  <div class="hero__kanji" data-par="0.18">呪術廻戦</div>
-  <div class="hero__sun" data-par="0.06"></div>
-  <div class="hero__orb" data-par="-0.12"></div>
+  <div class="hero__kanji" data-par="0.22" aria-hidden="true">渋谷事変</div>
+  <div class="hero__sun" data-par="0.08" aria-hidden="true"></div>
+
+  <!-- Manga panel hero background -->
+  <div class="hero__panel" aria-hidden="true">
+    <div class="hero__panel-speed"></div>
+    <div class="hero__panel-halftone"></div>
+    <div class="hero__panel-border hero__panel-border--tl"></div>
+    <div class="hero__panel-border hero__panel-border--tr"></div>
+    <div class="hero__panel-border hero__panel-border--bl"></div>
+    <div class="hero__panel-border hero__panel-border--br"></div>
+    <span class="hero__panel-onoma">ドドド</span>
+    <span class="hero__panel-onoma hero__panel-onoma--2">バキッ</span>
+  </div>
 
   <div class="hero__inner">
-    <p class="hero__eyebrow reveal"><span class="tick"></span> Tokyo Jujutsu High · Cursed Technique Archive</p>
+    <p class="hero__eyebrow reveal"><span class="tick"></span> Shibuya Incident · October 31 · 2018</p>
 
     <h1 class="hero__title">
-      <span class="line"><span class="glitch" data-text="JUJUTSU">JUJUTSU</span></span>
-      <span class="line"><span class="glitch out" data-text="KAISEN">KAISEN</span></span>
+      <span class="line"><span class="glitch" data-text="CURSED">CURSED</span></span>
+      <span class="line"><span class="glitch out" data-text="ARCHIVE">ARCHIVE</span></span>
     </h1>
 
     <p class="hero__jp reveal">呪いは人の負の感情から生まれる</p>
     <p class="hero__sub reveal" id="typeLine"></p>
 
     <div class="hero__cta reveal">
-      <a href="#sorcerers" class="btn btn--primary magnetic" data-cursor="link">
-        <span>Meet the Sorcerers</span>
+      <a href="#index" class="btn btn--primary magnetic" data-cursor="link">
+        <span>Open the Files</span>
         <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
       <button class="btn btn--ghost magnetic" id="heroDomain" data-cursor="link">
@@ -95,7 +112,7 @@
     </ul>
   </div>
 
-  <a href="#curses" class="scroll-hint" data-cursor="link">
+  <a href="#index" class="scroll-hint" data-cursor="link">
     <span>SCROLL</span><i></i>
   </a>
 </section>
@@ -103,100 +120,195 @@
 <!-- ═══════════ MARQUEE ═══════════ -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee__track">
-    <span>領域展開 <b>·</b> DOMAIN EXPANSION <b>·</b> 無量空処 <b>·</b> INFINITE VOID <b>·</b> 黒閃 <b>·</b> BLACK FLASH <b>·</b> 呪力 <b>·</b> CURSED ENERGY <b>·</b> 伏魔御厨子 <b>·</b> MALEVOLENT SHRINE <b>·</b> </span>
-    <span>領域展開 <b>·</b> DOMAIN EXPANSION <b>·</b> 無量空処 <b>·</b> INFINITE VOID <b>·</b> 黒閃 <b>·</b> BLACK FLASH <b>·</b> 呪力 <b>·</b> CURSED ENERGY <b>·</b> 伏魔御厨子 <b>·</b> MALEVOLENT SHRINE <b>·</b> </span>
+    <span>領域展開 <b>·</b> DOMAIN EXPANSION <b>·</b> 無量空処 <b>·</b> INFINITE VOID <b>·</b> 黒閃 <b>·</b> BLACK FLASH <b>·</b> 呪力 <b>·</b> CURSED ENERGY <b>·</b> 伏魔御厨子 <b>·</b> MALEVOLENT SHRINE <b>·</b> 渋谷事変 <b>·</b> SHIBUYA INCIDENT <b>·</b> </span>
+    <span>領域展開 <b>·</b> DOMAIN EXPANSION <b>·</b> 無量空処 <b>·</b> INFINITE VOID <b>·</b> 黒閃 <b>·</b> BLACK FLASH <b>·</b> 呪力 <b>·</b> CURSED ENERGY <b>·</b> 伏魔御厨子 <b>·</b> MALEVOLENT SHRINE <b>·</b> 渋谷事変 <b>·</b> SHIBUYA INCIDENT <b>·</b> </span>
   </div>
 </div>
 
-<!-- ═══════════ CURSES ═══════════ -->
-<section class="section curses" id="curses">
+<!-- ═══════════ CURSE INDEX ═══════════ -->
+<section class="section index" id="index">
   <div class="sec-head">
-    <span class="sec-num">01</span>
-    <h2 class="sec-title reveal-chars">CURSES</h2>
-    <span class="sec-jp">呪霊</span>
+    <span class="sec-num reveal">01</span>
+    <h2 class="sec-title reveal-chars">CURSE INDEX</h2>
+    <span class="sec-jp reveal">呪霊目録</span>
   </div>
 
-  <div class="curses__grid">
-    <div class="curses__copy">
+  <div class="index__grid">
+    <div class="index__copy">
       <p class="lead reveal">Cursed energy leaks from every human heart — fear, hatred, regret. Left to rot, it congeals into <b>Curses</b>: things born from us, shaped by us, hunting us.</p>
       <p class="reveal">Jujutsu sorcerers are the only ones who can see them, and the only ones who can exorcise them. It is a rotten profession. Someone still has to do it.</p>
-      <div class="quote-card reveal" data-cursor="link">
-        <p>“Throughout heaven and earth, I alone am the honored one.”</p>
-        <cite>— Satoru Gojo</cite>
+
+      <!-- MANGA PANEL: quote -->
+      <div class="manga-panel manga-panel--quote reveal" data-cursor="link">
+        <div class="manga-panel__halftone"></div>
+        <div class="manga-panel__speed"></div>
+        <span class="manga-panel__onoma">ゴゴゴ</span>
+        <p class="manga-panel__text">“Throughout heaven and earth, I alone am the honored one.”</p>
+        <cite class="manga-panel__cite">— Satoru Gojo</cite>
+        <div class="manga-panel__bubble">最強</div>
       </div>
     </div>
 
     <div class="curse-stack">
-      <article class="curse-card reveal" data-tilt style="--c:#7c5cff">
-        <span class="curse-card__idx">Ⅰ</span>
+      <!-- MANGA PANEL: cursed spirits -->
+      <article class="manga-panel manga-panel--card reveal" data-tilt style="--c:#7c5cff">
+        <div class="manga-panel__halftone"></div>
+        <div class="manga-panel__speed"></div>
+        <span class="manga-panel__idx">Ⅰ</span>
         <h3>Cursed Spirits</h3>
         <p>Manifested negativity. Graded 4 through Special, they grow stronger where crowds fear the most.</p>
-        <span class="curse-card__jp">呪霊</span>
+        <span class="manga-panel__jp">呪霊</span>
+        <div class="manga-panel__bubble">危険</div>
       </article>
-      <article class="curse-card reveal" data-tilt style="--c:#ff4d5e">
-        <span class="curse-card__idx">Ⅱ</span>
+
+      <!-- MANGA PANEL: cursed objects -->
+      <article class="manga-panel manga-panel--card reveal" data-tilt style="--c:#ff4d5e">
+        <div class="manga-panel__halftone"></div>
+        <div class="manga-panel__speed"></div>
+        <span class="manga-panel__idx">Ⅱ</span>
         <h3>Cursed Objects</h3>
         <p>Sealed remains of a monster. Swallow one and you invite a king to live inside your ribs.</p>
-        <span class="curse-card__jp">呪物</span>
+        <span class="manga-panel__jp">呪物</span>
+        <div class="manga-panel__bubble">封印</div>
       </article>
-      <article class="curse-card reveal" data-tilt style="--c:#6ee7ff">
-        <span class="curse-card__idx">Ⅲ</span>
+
+      <!-- MANGA PANEL: binding vows -->
+      <article class="manga-panel manga-panel--card reveal" data-tilt style="--c:#6ee7ff">
+        <div class="manga-panel__halftone"></div>
+        <div class="manga-panel__speed"></div>
+        <span class="manga-panel__idx">Ⅲ</span>
         <h3>Binding Vows</h3>
         <p>Trade something precious for power. The stricter the vow, the crueler the strength it returns.</p>
-        <span class="curse-card__jp">縛り</span>
+        <span class="manga-panel__jp">縛り</span>
+        <div class="manga-panel__bubble">契約</div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ SORCERERS ═══════════ -->
-<section class="section sorcerers" id="sorcerers">
+<!-- ═══════════ SORCERER VAULT ═══════════ -->
+<section class="section vault" id="vault">
   <div class="sec-head">
-    <span class="sec-num">02</span>
-    <h2 class="sec-title reveal-chars">SORCERERS</h2>
-    <span class="sec-jp">呪術師</span>
+    <span class="sec-num reveal">02</span>
+    <h2 class="sec-title reveal-chars">SORCERER VAULT</h2>
+    <span class="sec-jp reveal">呪術師</span>
   </div>
-  <p class="sec-note reveal">Hover a card to charge their cursed energy. Press <b>Expand</b> to open their domain.</p>
+  <p class="sec-note reveal">Hover a manga panel to charge their cursed energy. Press <b>Expand</b> to open their domain.</p>
 
   <div class="roster" id="roster"><!-- injected by script.js --></div>
 </section>
 
-<!-- ═══════════ DOMAINS ═══════════ -->
-<section class="section domains" id="domains">
+<!-- ═══════════ DOMAIN CLASH ═══════════ -->
+<section class="section clash" id="clash">
   <div class="sec-head">
-    <span class="sec-num">03</span>
-    <h2 class="sec-title reveal-chars">DOMAINS</h2>
-    <span class="sec-jp">領域展開</span>
+    <span class="sec-num reveal">03</span>
+    <h2 class="sec-title reveal-chars">DOMAIN CLASH</h2>
+    <span class="sec-jp reveal">領域衝突</span>
+  </div>
+  <p class="sec-note reveal">Two domains collide. The denser barrier swallows the other whole. <b>Press CLASH</b> to witness the manga panel battle.</p>
+
+  <div class="clash__stage reveal">
+    <!-- Left domain panel -->
+    <div class="clash__panel clash__panel--left" id="clashLeft" style="--dc:#6ee7ff">
+      <div class="clash__halftone"></div>
+      <div class="clash__speed"></div>
+      <div class="clash__kanji" id="clashLeftKanji">無量空処</div>
+      <div class="clash__name" id="clashLeftName">INFINITE VOID</div>
+      <div class="clash__caster" id="clashLeftCaster">SATORU GOJO</div>
+      <div class="clash__bubble">領域展開</div>
+    </div>
+
+    <!-- VS center -->
+    <div class="clash__vs">
+      <span class="clash__vs-text">VS</span>
+      <div class="clash__vs-beam" id="clashBeam"></div>
+      <button class="clash__btn magnetic" id="clashBtn" data-cursor="link">CLASH!</button>
+    </div>
+
+    <!-- Right domain panel -->
+    <div class="clash__panel clash__panel--right" id="clashRight" style="--dc:#ff4d5e">
+      <div class="clash__halftone"></div>
+      <div class="clash__speed"></div>
+      <div class="clash__kanji" id="clashRightKanji">伏魔御厨子</div>
+      <div class="clash__name" id="clashRightName">MALEVOLENT SHRINE</div>
+      <div class="clash__caster" id="clashRightCaster">RYOMEN SUKUNA</div>
+      <div class="clash__bubble">領域展開</div>
+    </div>
   </div>
 
-  <div class="domain-showcase">
-    <div class="domain-visual" id="domainVisual" data-cursor="link">
-      <div class="dv-ring dv-ring--1"></div>
-      <div class="dv-ring dv-ring--2"></div>
-      <div class="dv-ring dv-ring--3"></div>
-      <div class="dv-core"></div>
-      <div class="dv-kanji">無量空処</div>
-      <span class="dv-hint">TAP TO EXPAND</span>
-    </div>
+  <div class="clash__result reveal" id="clashResult">
+    <span class="clash__result-label">CLASH RESULT</span>
+    <p class="clash__result-text" id="clashResultText">Press CLASH to begin.</p>
+  </div>
+</section>
 
-    <div class="domain-copy">
-      <p class="lead reveal">A domain is a sorcerer's innermost self, turned inside out and painted over reality.</p>
-      <ul class="domain-list">
-        <li class="reveal"><b>Sure Hit</b><span>Inside the barrier, the technique never misses. Not once.</span></li>
-        <li class="reveal"><b>Cursed Technique Amplified</b><span>Energy cost is brutal; the payoff is a rewritten world.</span></li>
-        <li class="reveal"><b>Domain Clash</b><span>When two domains touch, the denser one swallows the other whole.</span></li>
-      </ul>
-      <button class="btn btn--primary magnetic" id="randomDomain" data-cursor="link"><span>Expand a random domain</span></button>
-    </div>
+<!-- ═══════════ SHIBUYA RULES ═══════════ -->
+<section class="section rules" id="rules">
+  <div class="sec-head">
+    <span class="sec-num reveal">04</span>
+    <h2 class="sec-title reveal-chars">SHIBUYA RULES</h2>
+    <span class="sec-jp reveal">渋谷事変の掟</span>
+  </div>
+  <p class="sec-note reveal">The unspoken laws that governed the night of October 31, 2018. Every sorcerer who walked into Shibuya knew these — or learned them the hard way.</p>
+
+  <div class="rules__grid">
+    <article class="rule-card reveal" style="--c:#6ee7ff">
+      <span class="rule-card__num">01</span>
+      <h3>Domain Expansion</h3>
+      <p>A barrier of cursed energy that guarantees a sure-hit technique. The more refined the barrier, the more absolute the kill.</p>
+      <span class="rule-card__jp">領域展開</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#7c5cff">
+      <span class="rule-card__num">02</span>
+      <h3>Binding Vows</h3>
+      <p>Trade something precious for power. The stricter the vow, the crueler the strength it returns. Sukuna's vow with Yuji is the most dangerous contract in history.</p>
+      <span class="rule-card__jp">縛り</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#ff4d5e">
+      <span class="rule-card__num">03</span>
+      <h3>Black Flash</h3>
+      <p>A distortion of space that occurs within 0.000001 seconds of impact. Cursed energy flashes black — the user's power spikes to 2.5× its normal output.</p>
+      <span class="rule-card__jp">黒閃</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#ffb020">
+      <span class="rule-card__num">04</span>
+      <h3>Simple Domain</h3>
+      <p>An anti-domain technique. A small barrier that neutralizes sure-hit effects. The last line of defense when facing a domain expansion.</p>
+      <span class="rule-card__jp">簡易領域</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#6ee7ff">
+      <span class="rule-card__num">05</span>
+      <h3>Domain Amplification</h3>
+      <p>Wrap yourself in a domain-like barrier that nullifies techniques on contact. Used by Mahito and the Disaster Curses to counter Gojo's Infinity.</p>
+      <span class="rule-card__jp">領域展開増幅</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#7c5cff">
+      <span class="rule-card__num">06</span>
+      <h3>The Prison Realm</h3>
+      <p>獄門疆 — a sealed cursed object that traps its target in an eternal prison. Gojo was sealed inside it on October 31, 2018. The strongest fell.</p>
+      <span class="rule-card__jp">獄門疆</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#ff4d5e">
+      <span class="rule-card__num">07</span>
+      <h3>Mahoraga's Adaptation</h3>
+      <p>The Ten Shadows' ultimate shikigami. It adapts to any phenomenon after experiencing it once. Sukuna defeated it by overwhelming it before it could adapt.</p>
+      <span class="rule-card__jp">魔虚羅</span>
+    </article>
+    <article class="rule-card reveal" style="--c:#ffb020">
+      <span class="rule-card__num">08</span>
+      <h3>Hollow Wicker Basket</h3>
+      <p>An ancient anti-domain technique that nullifies sure-hit effects without a barrier. Used by the Heian-era sorcerers — and by Sukuna against Gojo.</p>
+      <span class="rule-card__jp">空心の籠</span>
+    </article>
   </div>
 </section>
 
 <!-- ═══════════ GRADES ═══════════ -->
 <section class="section grades" id="grades">
   <div class="sec-head">
-    <span class="sec-num">04</span>
+    <span class="sec-num reveal">05</span>
     <h2 class="sec-title reveal-chars">GRADES</h2>
-    <span class="sec-jp">等級</span>
+    <span class="sec-jp reveal">等級</span>
   </div>
 
   <div class="ladder">
@@ -211,6 +323,11 @@
 <!-- ═══════════ CREED ═══════════ -->
 <section class="section creed" id="creed">
   <div class="creed__glow"></div>
+  <div class="creed__panel" aria-hidden="true">
+    <div class="creed__panel-halftone"></div>
+    <div class="creed__panel-speed"></div>
+    <span class="creed__panel-onoma">ドン</span>
+  </div>
   <blockquote class="creed__quote">
     <span class="reveal-chars">I</span>
     <span class="reveal-chars">DON'T</span>
@@ -225,14 +342,40 @@
   <p class="creed__by reveal">— Yuji Itadori · 虎杖悠仁</p>
 </section>
 
+<!-- ═══════════ SUPPORT / KO-FI ═══════════ -->
+<section class="section support" id="support">
+  <div class="support__orb" aria-hidden="true"></div>
+  <div class="support__inner">
+    <span class="support__tag reveal">KEEP THE ARCHIVE ALIVE</span>
+    <h2 class="support__title reveal-chars">CURSED ENERGY<br/>RUNS OUT.</h2>
+    <p class="support__sub reveal">This shrine is built and maintained by one person fueled by coffee and cursed energy. If this domain expanded your pupils, consider dropping a coin into the offering box. Every donation keeps the archive growing.</p>
+    <div class="support__cta reveal">
+      <a href="https://ko-fi.com/himanshu18" target="_blank" rel="noopener" class="kofi-btn magnetic" data-cursor="link">
+        <svg class="kofi-btn__cup" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M23.8 10H8v9.4c0 2.4 1.9 4.4 4.3 4.4h7c2.4 0 4.3-2 4.3-4.4V10z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M23.8 12h1.6c1.6 0 2.9 1.2 2.9 2.8 0 1.6-1.3 2.8-2.9 2.8h-1.6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11 8c0-1.6 1.2-2 2-3.4M15.5 8c0-1.6 1.2-2 2-3.4M20 8c0-1.6 1.2-2 2-3.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span>Buy me a coffee on Ko-fi</span>
+      </a>
+      <span class="support__pulse" aria-hidden="true"><i></i><i></i><i></i></span>
+    </div>
+    <div class="support__grid reveal">
+      <div class="support__stat" data-tilt><b>∞</b><i>Fingers of Sukuna</i></div>
+      <div class="support__stat" data-tilt><b>6</b><i>Eyes of Gojo</i></div>
+      <div class="support__stat" data-tilt><b>1</b><i>Dev & Archivist</i></div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer class="foot">
-  <div class="foot__kanji">廻戦</div>
+  <div class="foot__kanji" aria-hidden="true">廻戦</div>
   <div class="foot__row">
     <span>Fan-made tribute · Jujutsu Kaisen © Gege Akutami / Shueisha</span>
     <span class="foot__dot">·</span>
-    <span>Built with cursed energy & vanilla JS</span>
+    <span>Built with cursed energy, vanilla JS & manga panels</span>
   </div>
 
   <div class="foot__personal reveal">
@@ -251,18 +394,28 @@
           <span class="foot__mail-text">himeshbror@gmail.com</span>
         </a>
       </div>
+    </div>
+  </div>
 
   <button class="foot__top magnetic" id="toTop" data-cursor="link">↑ RETURN</button>
-
 </footer>
 
-<!-- ═══════════ DOMAIN OVERLAY ═══════════ -->
+<!-- ═══════════ FLOATING KO-FI BADGE ═══════════ -->
+<a href="https://ko-fi.com/himanshu18" target="_blank" rel="noopener" class="kofi-float magnetic" id="kofiFloat" data-cursor="link" aria-label="Support on Ko-fi">
+  <svg viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M23.8 10H8v9.4c0 2.4 1.9 4.4 4.3 4.4h7c2.4 0 4.3-2 4.3-4.4V10z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M23.8 12h1.6c1.6 0 2.9 1.2 2.9 2.8 0 1.6-1.3 2.8-2.9 2.8h-1.6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M11 8c0-1.6 1.2-2 2-3.4M15.5 8c0-1.6 1.2-2 2-3.4M20 8c0-1.6 1.2-2 2-3.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+  </svg>
+  <span>Ko-fi</span>
+</a>
 
+<!-- ═══════════ DOMAIN OVERLAY ═══════════ -->
 <div class="domain-overlay" id="domainOverlay" aria-hidden="true">
   <canvas id="domainCanvas"></canvas>
-  <div class="do-shock"></div>
-  <div class="do-ring"></div>
-  <div class="do-slashes"><i></i><i></i><i></i><i></i></div>
+  <div class="do-shock" aria-hidden="true"></div>
+  <div class="do-ring" aria-hidden="true"></div>
+  <div class="do-slashes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="do-content">
     <p class="do-caster" id="doCaster">SATORU GOJO</p>
     <h3 class="do-jp" id="doJp">無量空処</h3>

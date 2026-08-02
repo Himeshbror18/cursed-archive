@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   JUJUTSU KAISEN — Cursed Energy Engine
-   Vanilla JS · no frameworks · 60fps everywhere
+   CURSED ARCHIVE — Shibuya Incident Engine
+   Vanilla JS · manga panels · domain clash · 60fps
    ═══════════════════════════════════════════════════════════ */
 
 (() => {
@@ -49,7 +49,6 @@
     };
     tick();
 
-    // wait for everything (images, fonts) then fade
     const finish = () => {
       state.loaded = true;
       preBar.style.width = '100%';
@@ -68,11 +67,10 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     CUSTOM CURSOR  +  ripple / slash FX
+     CUSTOM CURSOR + ripple / slash FX
      ═══════════════════════════════════════════════════════════ */
   const initCursor = () => {
     if (state.reduced) return;
-    let rf = 0;
     const move = (e) => {
       state.mouse.x = e.clientX;
       state.mouse.y = e.clientY;
@@ -80,7 +78,6 @@
       clearTimeout(state.mouse._t);
       state.mouse._t = setTimeout(() => state.mouse.moving = false, 80);
 
-      // velocity for slash intensity
       const dx = e.clientX - state.mouse.lx;
       const dy = e.clientY - state.mouse.ly;
       state.mouse.v = Math.hypot(dx, dy);
@@ -89,24 +86,15 @@
 
       cursorDot.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
       cursorRing.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
-
-      if (!rf) rf = requestAnimationFrame(() => {
-        rf = 0;
-        // subtle scale by velocity
-        const s = Math.min(1.18, 1 + state.mouse.v / 520);
-        cursorDot.style.transform = `translate(${state.mouse.x}px,${state.mouse.y}px) scale(${s})`;
-      });
     };
     window.addEventListener('mousemove', move, { passive: true });
 
-    // hover state
     const hoverables = $$('[data-cursor="link"]');
     hoverables.forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
     });
 
-    // click ripple
     const ripple = (e) => {
       const r = document.createElement('div');
       r.className = 'ripple';
@@ -117,7 +105,6 @@
     };
     window.addEventListener('mousedown', ripple);
 
-    // slash on fast movement
     let lastSlash = 0;
     const slash = (e) => {
       if (state.mouse.v < 620 || performance.now() - lastSlash < 160) return;
@@ -149,12 +136,11 @@
     const COLORS = ['#6ee7ff', '#7c5cff', '#ff4d5e', '#fff'];
     let canvasVisible = true;
 
-    // adaptive particle count based on screen size + device capability
     const isMobile = window.matchMedia('(max-width:820px)').matches;
     const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
     const PARTICLE_COUNT = isMobile ? 60 : (isLowPerf ? 90 : 130);
     const CONNECT_DIST = isMobile ? 70 : 90;
-    const MAX_CONNECTIONS = isMobile ? 3 : 5; // cap per-particle line draws
+    const MAX_CONNECTIONS = isMobile ? 3 : 5;
 
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.3 : 1.8);
@@ -171,7 +157,6 @@
       resizeTimer = setTimeout(resize, 150);
     }, { passive: true });
 
-    // pause rendering when tab hidden (saves battery + CPU)
     document.addEventListener('visibilitychange', () => {
       canvasVisible = !document.hidden;
     });
@@ -200,18 +185,16 @@
 
       ctx.clearRect(0, 0, W, H);
 
-      // drift toward mouse
       const mx = state.mouse.x;
       const my = state.mouse.y;
       const mouseActive = state.mouse.moving;
 
-      // batch particle drawing
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         const dx = mx - p.x;
         const dy = my - p.y;
         const dist2 = dx * dx + dy * dy;
-        if (dist2 < 25600 && mouseActive) { // 160^2
+        if (dist2 < 25600 && mouseActive) {
           const dist = Math.sqrt(dist2);
           const f = (160 - dist) / 160;
           p.vx += (dx / dist) * .02 * f;
@@ -220,11 +203,9 @@
         p.vx *= .93; p.vy *= .93;
         p.x += p.vx; p.y += p.vy;
 
-        // wrap
         if (p.x < -2 || p.x > W + 2) p.vx *= -1, p.x = p.x < 0 ? W : 0;
         if (p.y < -2 || p.y > H + 2) p.vy *= -1, p.y = p.y < 0 ? H : 0;
 
-        // draw
         ctx.globalAlpha = p.a;
         ctx.fillStyle = p.c;
         ctx.beginPath();
@@ -232,7 +213,6 @@
         ctx.fill();
       }
 
-      // optimized connection pass — early-exit + capped connections
       ctx.strokeStyle = '#6ee7ff';
       ctx.lineWidth = .5;
       const cd2 = CONNECT_DIST * CONNECT_DIST;
@@ -256,7 +236,6 @@
         }
       }
 
-      // embers (throttled on mobile)
       if (Math.random() < (isMobile ? .08 : .18)) {
         embers.push({
           x: Math.random() * W,
@@ -286,7 +265,7 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     SCROLL REVEALS  +  ENERGY RAIL  +  NAV HIDE
+     SCROLL REVEALS + ENERGY RAIL + NAV
      ═══════════════════════════════════════════════════════════ */
   const initScroll = () => {
     const reveals = $$('.reveal, .reveal-chars');
@@ -300,7 +279,6 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
     reveals.forEach(r => observer.observe(r));
 
-    // energy rail
     const updateRail = () => {
       const scrollY = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
@@ -314,13 +292,11 @@
       state.scroll.dir = window.scrollY > state.scroll.last ? 1 : -1;
       state.scroll.last = window.scrollY;
 
-      // nav hide on scroll down
       if (state.scroll.dir > 0 && state.scroll.y > 160) {
         nav.classList.add('hide');
       } else {
         nav.classList.remove('hide');
       }
-      // nav stuck
       if (state.scroll.y > 80) nav.classList.add('stuck');
       else nav.classList.remove('stuck');
 
@@ -335,7 +311,7 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     COUNTERS  +  TEXT SCRAMBLE
+     COUNTERS + TEXT SCRAMBLE
      ═══════════════════════════════════════════════════════════ */
   const initCounters = () => {
     const nums = $$('[data-count]');
@@ -369,6 +345,7 @@
       'Hollow Purple · Cursed Technique',
       'Malevolent Shrine · Sukuna\'s domain',
       'Limitless · Six Eyes · Infinity',
+      'Shibuya Incident · October 31',
     ];
     const chars = 'アァカサタナハマヤラワガザダバパジュストロング';
     let idx = 0;
@@ -398,7 +375,7 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     MAGNETIC BUTTONS  +  TILT CARDS
+     MAGNETIC BUTTONS + TILT CARDS
      ═══════════════════════════════════════════════════════════ */
   const initMagnetic = () => {
     const items = $$('.magnetic');
@@ -443,7 +420,7 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     SORCERERS ROSTER  (data-driven)
+     SORCERERS ROSTER (manga panel cards)
      ═══════════════════════════════════════════════════════════ */
   const SORCERERS = [
     {
@@ -452,6 +429,7 @@
       p: '96%',
       domain: { jp: '無量空処', en: 'INFINITE VOID', desc: 'Infinite information floods the mind. Nothing can act.' },
       bio: 'The strongest sorcerer of his generation. Infinity bends space around him, and his domain leaves opponents drowned in the totality of existence.',
+      onoma: '最強',
     },
     {
       id: 'yuji', name: 'YUJI ITADORI', jp: '虎杖悠仁', grade: 'SPECIAL',
@@ -459,6 +437,7 @@
       p: '84%',
       domain: { jp: '伏魔御厨子', en: 'MALEVOLENT SHRINE', desc: 'Sukuna\'s shrine. Dismantle and Cleave rend everything within.' },
       bio: 'A human blessed with inhuman strength, housing the King of Curses. His right fist splits reality itself.',
+      onoma: '黒閃',
     },
     {
       id: 'megumi', name: 'MEGUMI FUSHIGURO', jp: '伏黒恵', grade: 'GRADE 1',
@@ -466,6 +445,7 @@
       p: '72%',
       domain: { jp: '神宝鏡舞', en: 'CHIMERA SHADOW GARDEN', desc: 'Shadows bloom into a garden of divine beasts.' },
       bio: 'A prodigy who summons shadow beasts. His domain is a garden where shadows take on divine, deadly forms.',
+      onoma: '影',
     },
     {
       id: 'nobara', name: 'NOBARA KAMITO', jp: '神森野々香', grade: 'GRADE 1',
@@ -473,6 +453,7 @@
       p: '68%',
       domain: { jp: '呪女郎', en: 'MAIDEN\'S CURSE', desc: 'A vengeful spirit doll that strikes without mercy.' },
       bio: 'Fearless and loud, she fights with a steel hammer and nails that carry her will straight into a curse\'s heart.',
+      onoma: 'ドン',
     },
     {
       id: 'sukuna', name: 'RYOMEN SUKUNA', jp: '両面薔夜', grade: 'SPECIAL',
@@ -480,6 +461,7 @@
       p: '100%',
       domain: { jp: '伏魔御厨子', en: 'MALEVOLENT SHRINE', desc: 'No barriers, no escape. The shrine razes everything to nothing.' },
       bio: 'The King of Curses. Twenty fingers, four arms, and a domain that needs no shrine — it simply is.',
+      onoma: '王',
     },
     {
       id: 'nanami', name: 'KENTA NANAMI', jp: '七海建太', grade: 'GRADE 1',
@@ -487,6 +469,7 @@
       p: '78%',
       domain: { jp: '金科玉鋼', en: 'IRON MOUNTAIN', desc: 'A blade of absolute precision that never misses its mark.' },
       bio: 'A salaryman who returned to sorcery. His ratio technique finds the one weak point in any defense.',
+      onoma: '7:3',
     },
   ];
 
@@ -498,6 +481,7 @@
         <div class="sorc__kanji">${s.jp}</div>
         <span class="sorc__grade">${s.grade}</span>
         <span class="sorc__id">#${String(SORCERERS.indexOf(s)+1).padStart(2,'0')}</span>
+        <span class="sorc__onoma">${s.onoma}</span>
         <h3 class="sorc__name">${s.name}</h3>
         <div class="sorc__jp">${s.jp}</div>
         <div class="sorc__tech"><em>Cursed Technique</em>${s.tech}</div>
@@ -507,7 +491,6 @@
       </article>
     `).join('');
 
-    // energy meter fill on view
     const meterObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -518,7 +501,6 @@
     }, { threshold: 0.6 });
     $$('.sorc').forEach(s => meterObs.observe(s));
 
-    // domain buttons
     $$('[data-domain]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -530,7 +512,7 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     DOMAIN EXPANSION  (overlay + canvas FX)
+     DOMAIN EXPANSION (overlay + canvas FX)
      ═══════════════════════════════════════════════════════════ */
   let domainRaf = 0;
   const openDomain = (s) => {
@@ -544,15 +526,12 @@
     $('#doEn').textContent = s.domain.en;
     $('#doDesc').textContent = s.domain.desc;
 
-    // reset animations
     $$('.do-slashes i').forEach(i => i.style.animation = 'none');
     void document.querySelector('.do-slashes').offsetWidth;
     $$('.do-slashes i').forEach(i => i.style.animation = '');
 
-    // canvas FX
     drawDomainCanvas(s);
 
-    // close
     const close = () => {
       domainOverlay.classList.remove('on');
       document.body.classList.remove('locked');
@@ -576,7 +555,6 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
-    // note: listener removed on close via clone — keep simple here
     const onResize = () => resize();
     window.addEventListener('resize', onResize, { passive: true });
 
@@ -591,7 +569,7 @@
         vy: (Math.random() - .5) * 1.2,
         r: Math.random() * 2.2 + .5,
         a: Math.random() * .6 + .2,
-        c: COLORS[Math.floor(Math.random() * COLORS.length)], // set once
+        c: COLORS[Math.floor(Math.random() * COLORS.length)],
       });
     }
 
@@ -609,7 +587,6 @@
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
-      // radial pulse
       const t = performance.now() * .001;
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
@@ -625,7 +602,6 @@
     };
     animate();
 
-    // cleanup resize listener when domain closes
     const origClose = $('#doClose').onclick;
     if (origClose) {
       $('#doClose').onclick = () => {
@@ -636,7 +612,92 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     DRAWER MENU  +  TOP BUTTON
+     DOMAIN CLASH — manga panel battle
+     ═══════════════════════════════════════════════════════════ */
+  const CLASH_PAIRS = [
+    {
+      left: { jp: '無量空処', en: 'INFINITE VOID', caster: 'SATORU GOJO', c: '#6ee7ff' },
+      right: { jp: '伏魔御厨子', en: 'MALEVOLENT SHRINE', caster: 'RYOMEN SUKUNA', c: '#ff4d5e' },
+      result: 'The denser barrier wins. Infinite Void floods Sukuna\'s mind — but the King of Curses adapts. The clash ends in a stalemate of absolute power.',
+    },
+    {
+      left: { jp: '神宝鏡舞', en: 'CHIMERA SHADOW GARDEN', caster: 'MEGUMI FUSHIGURO', c: '#7c5cff' },
+      right: { jp: '伏魔御厨子', en: 'MALEVOLENT SHRINE', caster: 'RYOMEN SUKUNA', c: '#ff4d5e' },
+      result: 'Sukuna\'s shrine is more refined. The shadow garden shatters — Megumi\'s domain is swallowed whole.',
+    },
+    {
+      left: { jp: '無量空処', en: 'INFINITE VOID', caster: 'SATORU GOJO', c: '#6ee7ff' },
+      right: { jp: '自閉円頓裹', en: 'SELF-EMBODIMENT OF PERFECTION', caster: 'MAHITO', c: '#7c5cff' },
+      result: 'Mahito\'s domain is refined, but Gojo\'s is absolute. Infinite Void overwhelms the curse\'s soul manipulation.',
+    },
+    {
+      left: { jp: '伏魔御厨子', en: 'MALEVOLENT SHRINE', caster: 'RYOMEN SUKUNA', c: '#ff4d5e' },
+      right: { jp: '自閉円頓裹', en: 'SELF-EMBODIMENT OF PERFECTION', caster: 'MAHITO', c: '#7c5cff' },
+      result: 'Sukuna\'s open barrier domain is a different breed. Mahito\'s domain is dismantled before it can manifest.',
+    },
+  ];
+
+  const initDomainClash = () => {
+    const btn = $('#clashBtn');
+    const beam = $('#clashBeam');
+    const leftPanel = $('#clashLeft');
+    const rightPanel = $('#clashRight');
+    const resultText = $('#clashResultText');
+    if (!btn || !beam) return;
+
+    let pairIdx = 0;
+    let clashing = false;
+
+    const setPair = (pair) => {
+      $('#clashLeftKanji').textContent = pair.left.jp;
+      $('#clashLeftName').textContent = pair.left.en;
+      $('#clashLeftCaster').textContent = pair.left.caster;
+      leftPanel.style.setProperty('--dc', pair.left.c);
+
+      $('#clashRightKanji').textContent = pair.right.jp;
+      $('#clashRightName').textContent = pair.right.en;
+      $('#clashRightCaster').textContent = pair.right.caster;
+      rightPanel.style.setProperty('--dc', pair.right.c);
+    };
+
+    const doClash = () => {
+      if (clashing) return;
+      clashing = true;
+      resultText.classList.remove('win');
+      resultText.textContent = '領域展開…';
+
+      // reset animations
+      leftPanel.classList.remove('clashing');
+      rightPanel.classList.remove('clashing');
+      void leftPanel.offsetWidth;
+
+      // beam grows
+      beam.classList.add('on');
+
+      // shake panels
+      leftPanel.classList.add('clashing');
+      rightPanel.classList.add('clashing');
+
+      // after clash, show result
+      setTimeout(() => {
+        const pair = CLASH_PAIRS[pairIdx];
+        resultText.textContent = pair.result;
+        resultText.classList.add('win');
+        beam.classList.remove('on');
+        leftPanel.classList.remove('clashing');
+        rightPanel.classList.remove('clashing');
+        clashing = false;
+        pairIdx = (pairIdx + 1) % CLASH_PAIRS.length;
+        setPair(CLASH_PAIRS[pairIdx]);
+      }, 1400);
+    };
+
+    btn.addEventListener('click', doClash);
+    setPair(CLASH_PAIRS[0]);
+  };
+
+  /* ═══════════════════════════════════════════════════════════
+     DRAWER MENU + TOP BUTTON
      ═══════════════════════════════════════════════════════════ */
   const initDrawer = () => {
     burger.addEventListener('click', () => {
@@ -644,7 +705,6 @@
       drawer.classList.toggle('open');
       document.body.classList.toggle('locked');
     });
-    // close drawer on nav link click
     $$('#drawer a').forEach(a => {
       a.addEventListener('click', () => {
         burger.classList.remove('on');
@@ -661,12 +721,11 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
-     PARALLAX (subtle, lerp-based)
+     PARALLAX (subtle)
      ═══════════════════════════════════════════════════════════ */
   const initParallax = () => {
     if (state.reduced) return;
     const items = $$('[data-par]');
-    let latest = 0;
     const update = () => {
       const scrollY = window.scrollY;
       items.forEach(el => {
@@ -674,7 +733,6 @@
         const y = scrollY * speed;
         el.style.transform = `translate3d(0,${y}px,0)`;
       });
-      latest = 0;
     };
     let ticking = false;
     const onScroll = () => {
@@ -716,12 +774,12 @@
     initMagnetic();
     initTilt();
     renderRoster();
+    initDomainClash();
     initDrawer();
     initToTop();
     initParallax();
     initRandomDomain();
 
-    // hero domain button
     const heroDomain = $('#heroDomain');
     if (heroDomain) {
       heroDomain.addEventListener('click', () => {
@@ -730,7 +788,6 @@
       });
     }
 
-    // domain visual click
     if (domainVisual) {
       domainVisual.addEventListener('click', () => {
         const s = SORCERERS[Math.floor(Math.random() * SORCERERS.length)];
