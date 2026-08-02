@@ -1,80 +1,35 @@
-# 呪 CURSED ARCHIVE — Shibuya Incident Files
+# 呪 CURSED ARCHIVE — Jujutsu Kaisen Compendium
 
-An immersive **Jujutsu Kaisen** manga experience — CSS-drawn manga panels, domain clashes, Shibuya Incident rules, and the sorcerers who survived it.
+An immersive, visually-stunning Jujutsu Kaisen fan page covering:
 
-> Fan-made tribute · Jujutsu Kaisen © Gege Akutami / Shueisha
+- **Cursed Energy & Techniques** — the power system explained
+- **Characters** — 9 sorcerers with signature cursed-energy colors
+- **Domain Expansion** — Unlimited Void, Malevolent Shrine, Chimera Shadow Garden, Self-Embodiment of Perfection + full mechanic explainer
+- **Season 2 Rules** — Hidden Inventory / Premature Death + Shibuya Incident arcs with the veil barrier, Prison Realm, binding vows, and the 200% Hollow Purple
 
----
+## Features
 
-## ✨ Features
+- **Procedural cursed-energy flames** — generated in pure Python (`tools/gen_ce.py`), no dependencies, fractal noise + radial falloff, 8 colors per character
+- **HD upscaled panels** — all manga images upscaled 2x with Lanczos3 via sharp (`tools/upscale.js`)
+- **Animated cursed energy particle canvas** — 110 glowing particles with motion trails
+- **Manga-influenced design** — kanji watermarks, corner brackets, grid-line background, color-theory-driven palette
+- **No emojis in content** — kanji labels instead (呪力 呪術式 縛り 黒閃 獄門疆...)
 
-- **Manga Panel Design System** — every card, quote, and section is framed as a comic panel with halftone screentones, speed lines, onomatopoeia (ゴゴゴ, ドドド, バキッ), and speech bubbles — all pure CSS, no images
-- **JJK Color Theory** — Gojo cyan, Sukuna red, Megumi violet, Nanami/Nobara gold on a near-black ink base with manga paper white accents
-- **Domain Clash Simulator** — two manga panels battle with a VS beam, screen shake, and rotating clash results (Infinite Void vs Malevolent Shrine, etc.)
-- **Shibuya Rules Section** — 8 official rules of the Shibuya Incident arc: Domain Expansion, Binding Vows, Black Flash, Simple Domain, Domain Amplification, Prison Realm, Mahoraga, Hollow Wicker Basket
-- **Sorcerer Vault** — manga-panel character cards with onomatopoeia tags, cursed energy meters, and expandable domains
-- **Domain Expansion Overlay** — full-screen canvas domain expansion with expanding slashes
-- **Immersive preloader** — manga-style loading screen with ゴゴゴ onomatopoeia
-- **Custom cursor** — cursed-energy cursor dot & ring with click ripples and velocity slashes
-- **Animated hero** — glitch text, parallax layers, live typewriter, manga panel frame background
-- **Curse Index** — cursed spirits, cursed objects & binding vows as manga panels
-- **Grade ladder** — Grade 4 to Special Grade with animated bars
-- **Creed section** — dramatic manga-panel reveal of Yuji Itadori's creed
-- **Marquee ticker** — scrolling Japanese/English cursed-energy terms
-- **Support section + Ko-fi** — dedicated donation shrine + floating Ko-fi badge → [ko-fi.com/himanshu18](https://ko-fi.com/himanshu18)
-- **Fully responsive** — mobile drawer menu, touch-friendly interactions, reduced-motion support
+## Usage
 
-## 🛠️ Tech Stack
+Open `index.html` in any modern browser. All assets are local — no external requests.
 
-- **HTML5** — semantic structure
-- **CSS3** — custom properties, keyframe animations, manga panel primitives (halftone, speed lines, bubbles), responsive layout
-- **Vanilla JavaScript** — DOM manipulation, canvas effects, parallax, typewriter, domain clash engine
-- **Google Fonts** — Anton, Noto Serif JP, Rajdhani, Share Tech Mono, Bangers
-- **GitHub Pages / any static host** — no build step required
+## Credits
 
-## 🚀 Getting Started
+- All characters, images, and lore belong to Gege Akutami and their respective owners.
+- Maintained by **HIMESH BROR**
+- Support on [Ko-fi](https://ko-fi.com/himanshu18)
 
-Open `index.html` in your browser — no build step required.
+## Asset Generation
 
 ```bash
-# Clone the repo
-git clone https://github.com/Himeshbror18/cursed-archive.git
+# Upscale images (requires Node.js + sharp)
+node tools/upscale.js
 
-# Open the project
-cd cursed-archive
-open index.html   # macOS
-# or
-xdg-open index.html   # Linux
-```
-
-## 📁 Project Structure
-
-```
-cursed-archive/
-├── index.html      # Main page structure
-├── style.css       # All styling, manga panel primitives & animations
-├── script.js       # Interactivity, canvas effects & domain clash engine
-└── .gitignore      # Git ignore rules
-```
-
-## 🎨 Customization
-
-- **Colors** — edit CSS custom properties in `style.css` (see the color theory comment at the top)
-- **Sorcerers** — roster is injected by `script.js`; add/remove entries there
-- **Domain Clash** — clash pairs & results live in `CLASH_PAIRS` in `script.js`
-- **Shibuya Rules** — edit the rule cards in `index.html`
-- **Ko-fi link** — search `ko-fi.com/himanshu18` in `index.html` to point it anywhere
-
-## ☕ Support
-
-If this domain expanded your pupils, consider a coffee:
-
-**[https://ko-fi.com/himanshu18](https://ko-fi.com/himanshu18)**
-
-## 📧 Contact
-
-Maintained by **himesh bror** — [himeshbror@gmail.com](mailto:himeshbror@gmail.com)
-
----
-
-*Built with cursed energy, vanilla JS & manga panels.*
+# Generate cursed-energy flame textures (pure Python, no deps)
+python3 tools/gen_ce.py
