@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>領域展開 DOMAIN EXPANSION SIMULATOR — Jujutsu Kaisen</title>
+<style>
+  /* ============ ROOT ============ */
+  :root{
+    --bg:#05050c;
+    --bg2:#0a0a16;
+    --ink:#eef0ff;
+    --muted:#8a8aa5;
+    --gojo:#4fc3f7;
+    --sukuna:#b388ff;
+    --megumi:#26c6da;
+    --mahito:#cfd8dc;
+    --amp:#ff7043;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  ::selection{background:var(--sukuna);color:#05050c;}
+
+  /* ============ NAV ============ */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0.9rem 2.5rem;
+    background:rgba(5,5,12,0.8);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(179,136,255,0.15);
+  }
+  nav .logo{
+    font-weight:900;font-size:1.2rem;letter-spacing:2px;
+    background:linear-gradient(90deg,var(--gojo),var(--sukuna));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-decoration:none;
+  }
+  nav .links a{
+    color:var(--muted);text-decoration:none;margin-left:1.6rem;
+    font-size:0.88rem;letter-spacing:1px;transition:color .3s;
+  }
+  nav .links a:hover{color:var(--gojo);}
+  nav .links a.back{
+    border:1px solid rgba(179,136,255,0.4);color:var(--sukuna);
+    padding:0.35rem 1rem;border-radius:50px;font-weight:700;
+  }
+  nav .links a.back:hover{background:rgba(179,136,255,0.12);}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;min-height:70vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:7rem 2rem 4rem;overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:0;z-index:-1;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(179,136,255,0.18), transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(38,198,218,0.12), transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(79,195,247,0.12), transparent 50%),
+      linear-gradient(180deg,#05050c,#0a0a16);
+  }
+  .hero .kicker{
+    font-size:0.8rem;letter-spacing:6px;color:var(--sukuna);
+    text-transform:uppercase;margin-bottom:1rem;
+    animation:fadeUp 1s ease forwards;opacity:0;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem,8vw,5.5rem);font-weight:900;letter-spacing:3px;
+    line-height:1.05;margin-bottom:1rem;
+    background:linear-gradient(120deg,#fff,var(--gojo) 35%,var(--sukuna) 70%,#fff);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    background-size:200% auto;
+    animation:shimmer 6s linear infinite,fadeUp 1.2s ease forwards;opacity:0;
+  }
+  @keyframes shimmer{to{background-position:200% center}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  .hero .sub{
+    max-width:620px;color:var(--muted);font-size:1.02rem;
+    animation:fadeUp 1.4s ease forwards;opacity:0;
+  }
+  .hero .cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:2rem;animation:fadeUp 1.6s ease forwards;opacity:0;}
+  .btn{
+    padding:0.75rem 1.9rem;border-radius:50px;text-decoration:none;font-weight:700;
+    letter-spacing:1px;font-size:0.9rem;transition:all .3s;border:1px solid transparent;cursor:pointer;
+  }
+  .btn-primary{
+    background:linear-gradient(90deg,var(--gojo),var(--sukuna));
+    color:#05050c;box-shadow:0 0 25px rgba(179,136,255,0.4);
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(79,195,247,0.6);}
+  .btn-ghost{border-color:rgba(179,136,255,0.4);color:var(--sukuna);background:transparent;}
+  .btn-ghost:hover{background:rgba(179,136,255,0.1);transform:translateY(-3px);}
+
+  /* ============ SIMULATOR STAGE ============ */
+  .stage-sec{
+    position:relative;z-index:1;padding:4rem 1.5rem 6rem;
+    background:linear-gradient(180deg,#0a0a16,#05050c);
+  }
+  .stage-wrap{
+    max-width:1000px;margin:0 auto;
+  }
+  .stage-frame{
+    position:relative;border-radius:22px;overflow:hidden;
+    border:1px solid rgba(179,136,255,0.2);
+    background:#000;
+    box-shadow:0 0 60px rgba(179,136,255,0.08),0 30px 80px rgba(0,0,0,0.7);
+  }
+  .stage-frame video{
+    width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
+    filter:saturate(0.85) contrast(1.05);
+    transition:filter .6s;
+    transform:scaleX(-1); /* mirror */
+  }
+  .stage-frame canvas{
+    position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+  }
+  /* animated domain overlay layers */
+  .stage-frame .domain-overlay{
+    position:absolute;inset:0;pointer-events:none;opacity:0;
+    transition:opacity .5s;
+  }
+  .stage-frame .domain-overlay.active{opacity:1;}
+  .stage-frame .do-radial{
+    position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 50%, transparent 0%, transparent 45%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.9) 100%);
+  }
+  .stage-frame .do-vignette{
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse at center, transparent 55%, var(--dc,rgba(179,136,255,0.25)) 100%);
+    mix-blend-mode:screen;
+  }
+  .stage-frame .do-scanlines{
+    position:absolute;inset:0;opacity:0.25;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 3px);
+  }
+  .stage-frame .do-grid{
+    position:absolute;inset:-50%;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size:48px 48px;
+    animation:gridRot 30s linear infinite;
+    mask-image:radial-gradient(circle at center, black 20%, transparent 70%);
+    -webkit-mask-image:radial-gradient(circle at center, black 20%, transparent 70%);
+  }
+  @keyframes gridRot{
+    from{transform:translate(-50%,-50%) rotate(0deg)}
+    to{transform:translate(-50%,-50%) rotate(360deg)}
+  }
+  .stage-frame .do-kanji{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    font-size:clamp(4rem,16vw,9rem);font-weight:900;
+    color:transparent;-webkit-text-stroke:1px var(--dc,rgba(255,255,255,0.5));
+    font-family:'Noto Serif JP','Yu Mincho',serif;
+    opacity:0.5;letter-spacing:0.2em;white-space:nowrap;
+    animation:kanjiPulse 3s ease-in-out infinite;
+    text-shadow:0 0 40px var(--dc,rgba(255,255,255,0.3));
+  }
+  @keyframes kanjiPulse{0%,100%{opacity:0.3}50%{opacity:0.7}}
+
+  /* activation flash ring */
+  .stage-frame .activation{
+    position:absolute;inset:0;pointer-events:none;opacity:0;z-index:5;
+  }
+  .stage-frame .activation.flash{
+    background:var(--dc,#fff);
+    animation:actFlash 0.6s ease-out forwards;
+  }
+  @keyframes actFlash{0%{opacity:0.9}100%{opacity:0}}
+  .stage-frame .activation.ring{
+    left:50%;top:50%;width:20px;height:20px;margin:-10px;
+    border-radius:50%;
+    border:3px solid var(--dc,#fff);
+    box-shadow:0 0 60px var(--dc,#fff),inset 0 0 40px var(--dc,#fff);
+    animation:actRing 1.2s ease-out forwards;
+  }
+  @keyframes actRing{
+    0%{opacity:1;transform:scale(0.2)}
+    100%{opacity:0;transform:scale(25)}
+  }
+
+  /* ============ INFO BAR ============ */
+  .info-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:1rem;margin-top:1.2rem;padding:1rem 1.5rem;
+    background:rgba(179,136,255,0.06);border:1px solid rgba(179,136,255,0.15);
+    border-radius:16px;backdrop-filter:blur(8px);
+  }
+  .info-bar .status{display:flex;align-items:center;gap:0.7rem;font-size:0.92rem;}
+  .pulse-dot{
+    width:10px;height:10px;border-radius:50%;
+    background:#ff5252;box-shadow:0 0 10px #ff5252;
+    animation:dotPulse 1.6s infinite;
+  }
+  .pulse-dot.on{background:#69f0ae;box-shadow:0 0 12px #69f0ae;}
+  @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .info-bar .fingers{
+    font-size:0.92rem;color:var(--muted);letter-spacing:1px;
+  }
+  .info-bar .fingers b{color:var(--ink);font-size:1.05rem;}
+
+  /* ============ DOMAIN DISPLAY CARD ============ */
+  .domain-display{
+    position:relative;margin-top:1.2rem;border-radius:20px;overflow:hidden;
+    border:1px solid rgba(255,255,255,0.08);
+    background:linear-gradient(170deg,rgba(18,18,34,0.97),rgba(7,7,14,0.97));
+    min-height:200px;
+    transition:border-color .5s,box-shadow .5s;
+  }
+  .domain-display.active{border-color:var(--dc,rgba(179,136,255,0.5));box-shadow:0 0 50px var(--dc,rgba(179,136,255,0.15));}
+  .domain-display .dd-bg{
+    position:absolute;inset:0;z-index:0;opacity:0;transition:opacity .8s;
+    background:radial-gradient(circle at 30% 50%, var(--dc,rgba(179,136,255,0.2)), transparent 60%);
+  }
+  .domain-display.active .dd-bg{opacity:1;}
+  .domain-display .dd-kanji-bg{
+    position:absolute;right:-10px;bottom:-30px;font-size:10rem;font-weight:900;
+    line-height:1;color:var(--dc,rgba(179,136,255,0.1));
+    font-family:'Noto Serif JP',serif;user-select:none;pointer-events:none;
+    transition:transform .8s;z-index:1;
+  }
+  .domain-display.active .dd-kanji-bg{transform:scale(1.1);}
+  .domain-display .dd-inner{
+    position:relative;z-index:2;display:flex;gap:1.8rem;align-items:center;
+    padding:1.8rem;min-height:200px;
+  }
+  .dd-char{
+    flex-shrink:0;width:190px;height:250px;overflow:hidden;
+    position:relative;border-radius:14px;border:1px solid rgba(255,255,255,0.1);
+    background:radial-gradient(circle at 50% 70%, var(--dc,rgba(179,136,255,0.2)), transparent 65%);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .dd-char img{
+    height:100%;width:100%;object-fit:contain;
+    opacity:0;transform:translateY(40px) scale(0.85);
+    filter:drop-shadow(0 0 25px var(--dc,rgba(255,255,255,0.3)));
+    transition:opacity .6s,transform .6s;
+    position:relative;z-index:2;
+  }
+  .domain-display.active .dd-char img{opacity:1;transform:translateY(0) scale(1);}
+  .dd-char .char-aura{
+    position:absolute;inset:0;background:radial-gradient(circle at 50% 65%, var(--dc,rgba(255,255,255,0.35)), transparent 60%);
+    filter:blur(25px);opacity:0;transition:opacity .8s;z-index:1;
+  }
+  .domain-display.active .dd-char .char-aura{opacity:0.9;animation:auraBreathe 2.5s ease-in-out infinite;}
+  @keyframes auraBreathe{0%,100%{opacity:0.5}50%{opacity:1}}
+  .dd-info{flex:1;}
+  .dd-info .dd-tag{
+    font-size:0.72rem;letter-spacing:4px;color:var(--dc,var(--sukuna));
+    text-transform:uppercase;margin-bottom:0.5rem;
+  }
+  .dd-info .dd-name{
+    font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;letter-spacing:1px;margin-bottom:0.3rem;
+    color:var(--ink);
+  }
+  .dd-info .dd-kanji-name{
+    font-size:1.1rem;color:var(--dc,var(--sukuna));letter-spacing:3px;margin-bottom:0.8rem;
+    font-family:'Noto Serif JP',serif;
+  }
+  .dd-info .dd-user{
+    font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem;
+  }
+  .dd-info .dd-char-name{
+    font-size:0.78rem;letter-spacing:3px;color:var(--dc,var(--sukuna));text-transform:uppercase;
+    margin-bottom:0.8rem;font-weight:800;
+  }
+  .dd-info .dd-desc{color:var(--muted);font-size:0.92rem;max-width:500px;}
+  .dd-placeholder{position:relative;z-index:2;padding:1.8rem;text-align:center;color:var(--muted);}
+  .dd-placeholder .big{font-size:2.6rem;margin-bottom:0.5rem;opacity:0.3;font-family:'Noto Serif JP',serif;}
+  .dd-placeholder h3{color:var(--ink);margin-bottom:0.5rem;font-size:1.3rem;}
+  .dd-placeholder .hint{
+    display:inline-flex;align-items:center;gap:0.5rem;margin-top:1rem;
+    padding:0.6rem 1.2rem;border-radius:50px;border:1px dashed rgba(179,136,255,0.4);
+    color:var(--sukuna);font-size:0.85rem;animation:hintPulse 2s infinite;
+  }
+  @keyframes hintPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+  @media(max-width:640px){
+    .dd-inner{flex-direction:column;text-align:center;}
+    .dd-info .dd-desc{margin:0 auto;}
+    .dd-char{width:150px;height:200px;}
+  }
+
+  /* ============ MANUAL MODE BUTTONS ============ */
+  .manual-row{
+    display:flex;gap:0.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.2rem;
+  }
+  .manual-row .mbtn{
+    padding:0.6rem 1.3rem;border-radius:50px;cursor:pointer;
+    background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);
+    color:var(--muted);font-weight:700;font-size:0.85rem;letter-spacing:1px;
+    transition:all .3s;
+  }
+  .manual-row .mbtn:hover{border-color:var(--dc,var(--sukuna));color:var(--ink);background:rgba(179,136,255,0.1);}
+
+  /* ============ GUIDE CARDS ============ */
+  .guide-sec{
+    position:relative;z-index:1;padding:5rem 1.5rem;
+    background:linear-gradient(180deg,#05050c,#0a0a16,#05050c);
+  }
+  .guide-wrap{max-width:1100px;margin:0 auto;}
+  .sec-head{text-align:center;margin-bottom:3.5rem;}
+  .sec-head .tag{
+    font-size:0.78rem;letter-spacing:5px;color:var(--gojo);text-transform:uppercase;margin-bottom:0.8rem;
+  }
+  .sec-head h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:2px;}
+  .sec-head p{color:var(--muted);max-width:640px;margin:0.8rem auto 0;font-size:0.95rem;}
+  .guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;}
+  .guide-card{
+    position:relative;border-radius:16px;overflow:hidden;
+    background:linear-gradient(170deg,rgba(20,20,36,0.97),rgba(8,8,16,0.97));
+    border:1px solid rgba(255,255,255,0.08);padding:1.6rem;
+    transition:transform .4s,box-shadow .4s,border-color .4s;
+    cursor:pointer;
+  }
+  .guide-card:hover{transform:translateY(-6px);border-color:var(--dc,rgba(179,136,255,0.4));box-shadow:0 15px 40px rgba(0,0,0,0.6);}
+  .guide-card .gc-hand{
+    width:70px;height:70px;border-radius:12px;margin-bottom:1rem;
+    border:1px solid rgba(255,255,255,0.12);
+    background:
+      radial-gradient(circle at 50% 50%, var(--dc,rgba(255,255,255,0.15)), transparent 65%),
+      rgba(255,255,255,0.03);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.9rem;font-weight:900;color:var(--dc,var(--sukuna));
+    position:relative;overflow:hidden;
+  }
+  .guide-card .gc-hand::after{
+    content:'';position:absolute;inset:0;border-radius:12px;
+    box-shadow:inset 0 0 18px var(--dc,rgba(179,136,255,0.35));
+    animation:handGlow 3s ease-in-out infinite;
+  }
+  @keyframes handGlow{0%,100%{opacity:0.3}50%{opacity:0.8}}
+  .guide-card .gc-count{
+    font-size:0.7rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:0.3rem;
+  }
+  .guide-card h3{font-size:1.2rem;margin-bottom:0.2rem;color:var(--ink);}
+  .guide-card .gc-kanji{font-size:0.85rem;color:var(--dc,var(--sukuna));letter-spacing:2px;margin-bottom:0.7rem;font-family:'Noto Serif JP',serif;}
+  .guide-card p{color:var(--muted);font-size:0.85rem;}
+  .guide-card .gc-sign{font-size:0.78rem;margin-top:0.8rem;padding-top:0.7rem;border-top:1px solid rgba(255,255,255,0.07);color:var(--ink);font-weight:700;}
+  .guide-card .gc-sign span{color:var(--dc,var(--sukuna));}
+
+  /* ============ FOOTER ============ */
+  footer{
+    position:relative;z-index:1;text-align:center;padding:3rem 2rem;
+    border-top:1px solid rgba(179,136,255,0.1);color:var(--muted);font-size:0.85rem;
+  }
+  footer .logo{
+    font-weight:800;letter-spacing:2px;margin-bottom:0.5rem;
+    background:linear-gradient(90deg,var(--gojo),var(--sukuna));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  /* toast */
+  #toast{
+    position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
+    background:rgba(10,10,22,0.95);border:1px solid var(--dc,rgba(179,136,255,0.4));
+    color:var(--ink);padding:0.9rem 1.6rem;border-radius:50px;
+    font-size:0.9rem;font-weight:700;letter-spacing:1px;z-index:300;
+    transition:transform .4s ease;box-shadow:0 10px 30px rgba(0,0,0,0.6);
+    font-family:'Noto Serif JP','Segoe UI',sans-serif;
+  }
+  #toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="index.html">呪術廻戦 · DOMAIN LAB</a>
+  <div class="links">
+    <a href="#simulator">Simulator</a>
+    <a href="#guide">Hand Signs</a>
+    <a class="back" href="index.html">← Archive</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="kicker">領域展開 · Casting Chamber</div>
+  <h1>DOMAIN EXPANSION<br>SIMULATOR</h1>
+  <p class="sub">Show your hand to the camera. The hand sign you form determines the Domain Expansion you cast — and the camera responds. Form the seal, hold it, and watch the domain manifest.</p>
+  <div class="cta">
+    <button class="btn btn-primary" id="scStartBtn">⚡ Activate Camera</button>
+    <a href="#guide" class="btn btn-ghost">Learn the Hand Signs</a>
+  </div>
+</header>
+
+<!-- SIMULATOR -->
+<section class="stage-sec" id="simulator">
+  <div class="stage-wrap">
+
+    <div class="stage-frame" id="stageFrame">
+      <video id="cam" autoplay playsinline muted></video>
+      <canvas id="fx" width="1280" height="720"></canvas>
+
+      <!-- domain overlay layers -->
+      <div class="domain-overlay" id="overlay">
+        <div class="do-grid"></div>
+        <div class="do-radial"></div>
+        <div class="do-vignette"></div>
+        <div class="do-scanlines"></div>
+        <div class="do-kanji" id="overlayKanji">領域展開</div>
+      </div>
+
+      <!-- activation effects -->
+      <div class="activation flash" id="actFlash"></div>
+      <div class="activation ring" id="actRing"></div>
+    </div>
+
+    <!-- status bar -->
+    <div class="info-bar">
+      <div class="status">
+        <span class="pulse-dot" id="camDot"></span>
+        <span id="camStatus">Camera offline</span>
+      </div>
+      <div class="fingers">
+        HAND SIGN → <b id="fingerCount">–</b> fingers
+      </div>
+      <div class="fingers">
+        DOMAIN → <b id="domainName">–</b>
+      </div>
+    </div>
+
+    <!-- domain display -->
+    <div class="domain-display" id="domainDisplay">
+      <div class="dd-bg"></div>
+      <div class="dd-kanji-bg" id="ddKanjiBg">域</div>
+      <div class="dd-inner" id="ddInner" style="display:none;">
+        <div class="dd-char">
+          <div class="char-aura"></div>
+          <img id="ddCharImg" alt="Sorcerer">
+        </div>
+        <div class="dd-info">
+          <div class="dd-tag" id="ddTag">Domain Expansion</div>
+          <div class="dd-name" id="ddName">—</div>
+          <div class="dd-kanji-name" id="ddKanji">—</div>
+          <div class="dd-user" id="ddUser">—</div>
+          <div class="dd-char-name" id="ddCharacterName">—</div>
+          <p class="dd-desc" id="ddDesc">—</p>
+        </div>
+      </div>
+      <div class="dd-placeholder" id="ddPlaceholder">
+        <div class="big">領域展開</div>
+        <h3>Awaiting Your Hand Seal</h3>
+        <p>Activate the camera, then form a hand sign in front of it.<br>Hold the seal to manifest the domain.</p>
+        <div class="hint">✋ 0 · ☝ 1 · ✌ 2 · 🤟 3 · 🖖 4 · 🖐 5</div>
+      </div>
+    </div>
+
+    <!-- manual mode (fallback) -->
+    <div class="manual-row" id="manualRow" style="display:none;">
+      <button class="mbtn" data-idx="0">✊ Amplify</button>
+      <button class="mbtn" data-idx="1">☝ Domain Amplification</button>
+      <button class="mbtn" data-idx="2">✌ Unlimited Void</button>
+      <button class="mbtn" data-idx="3">🤟 Chimera Shadow Garden</button>
+      <button class="mbtn" data-idx="4">🖖 Malevolent Shrine</button>
+      <button class="mbtn" data-idx="5">🖐 Self-Embodiment</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- HAND SIGN GUIDE -->
+<section class="guide-sec" id="guide">
+  <div class="guide-wrap">
+    <div class="sec-head">
+      <div class="tag">The Seals</div>
+      <h2>Hand Signs & Their Domains</h2>
+      <p>In jujutsu, the hands seal the technique. Raise the finger count shown below to summon that domain. Click any card to cast it manually.</p>
+    </div>
+    <div class="guide-grid" id="guideGrid">
+      <!-- cards injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">呪術廻戦 · DOMAIN EXPANSION SIMULATOR</div>
+  <p>A fan-made simulator. All characters, images, and lore belong to Gege Akutami and their respective owners.</p>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   DOMAIN EXPANSION SIMULATOR
+   - MediaPipe HandLandmarker (in-browser, TensorFlow Lite / WASM)
+   - Hand sign (finger count) → Domain Expansion mapping
+   - Dope camera effects + high-quality character reveal
+   ========================================================= */
+
+/* ---------- DOMAIN DATABASE ---------- */
+const DOMAINS = [
+  {
+    idx: 0, fingers: 0, name: 'DOMAIN AMPLIFICATION',
+    kanji: '領域展開', bigKanji: '域', user: 'Generic Barrier Technique',
+    color: '#ff7043',
+    desc: 'A barrier technique that coats the body in cursed energy like armor. Not a true domain — but a raw surge of power that neutralizes techniques on contact.',
+    img: 'assets/black_flash.png', accent: '#ff7043', char: 'ITADORI / BLACK FLASH'
+  },
+  {
+    idx: 1, fingers: 1, name: 'CURSED TECHNIQUE EMBER',
+    kanji: '術式解放', bigKanji: '術', user: 'The Sorcerer\'s Release',
+    color: '#ffd54f',
+    desc: 'One finger raised — the seal of a sorcerer about to release their innate technique. A golden ember of cursed energy ignites around your form.',
+    img: 'assets/cursed_energy.png', accent: '#ffd54f', char: 'CURSED ENERGY'
+  },
+  {
+    idx: 2, fingers: 2, name: 'UNLIMITED VOID',
+    kanji: '無量空処', bigKanji: '無', user: 'Satoru Gojo',
+    color: '#4fc3f7',
+    desc: 'The two-finger seal of the strongest. An endless void floods the target\'s mind with infinite information — every sensation at once, paralyzing thought itself.',
+    img: 'assets/gojo.png', accent: '#4fc3f7', char: 'SATORU GOJO'
+  },
+  {
+    idx: 3, fingers: 3, name: 'CHIMERA SHADOW GARDEN',
+    kanji: '嵌合暗翳庭', bigKanji: '影', user: 'Megumi Fushiguro',
+    color: '#26c6da',
+    desc: 'The three-fold shadow seal. The world becomes living shadow, and shikigami — Divine Dogs, Nue, Mahoraga — tear free from every surface.',
+    img: 'assets/megumi.png', accent: '#26c6da', char: 'MEGUMI FUSHIGURO'
+  },
+  {
+    idx: 4, fingers: 4, name: 'MALEVOLENT SHRINE',
+    kanji: '伏魔御厨子', bigKanji: '魔', user: 'Ryomen Sukuna',
+    color: '#b388ff',
+    desc: 'Four fingers — the King of Curses. An open-barrier domain with no escape; Cleave and Dismantle rain down as an unavoidable storm. Nothing survives.',
+    img: 'assets/sukuna.png', accent: '#b388ff', char: 'RYOMEN SUKUNA'
+  },
+  {
+    idx: 5, fingers: 5, name: 'SELF-EMBODIMENT OF PERFECTION',
+    kanji: '自閉円頓裹', bigKanji: '円', user: 'Mahito',
+    color: '#cfd8dc',
+    desc: 'All five fingers — the dome of countless hands. Within, Idle Transfiguration is a guaranteed hit; a single touch reshapes soul and body forever.',
+    img: 'assets/mahito.png', accent: '#cfd8dc', char: 'MAHITO'
+  }
+];
+
+/* ---------- STATE ---------- */
+let activeDomain = null;       // DOMAINS entry
+let domainSignalTimer = null;  // hold-to-activate timer
+let lastFingerCount = -1;
+let stableSince = 0;
+let handDetector = null;
+let cameraStream = null;
+let camRunning = false;
+let lastVideoTime = -1;
+let rafId = null;
+let mpLoading = false;
+let manualMode = false;
+let audioCtx = null;
+
+/* ---------- DOM REFS ---------- */
+const $ = id => document.getElementById(id);
+const cam = $('cam'), fx = $('fx'), fctx = fx.getContext('2d');
+const stageFrame = $('stageFrame'), overlay = $('overlay');
+const overlayKanji = $('overlayKanji'), actFlash = $('actFlash'), actRing = $('actRing');
+const domainDisplay = $('domainDisplay'), ddInner = $('ddInner'), ddPlaceholder = $('ddPlaceholder');
+const ddCharImg = $('ddCharImg'), ddKanjiBg = $('ddKanjiBg');
+const ddCharacterName = $('ddCharacterName');
+const fingerCountEl = $('fingerCount'), domainNameEl = $('domainName');
+const toast = $('toast');
+
+/* ---------- BUILD GUIDE CARDS ---------- */
+const fingersEmoji = ['✊','☝','✌','🤟','🖖','🖐'];
+const fingersLabel = ['Fist','Index','Peace','Three','Four','Open Palm'];
+const guideGrid = $('guideGrid');
+DOMAINS.forEach((d,i)=>{
+  const card = document.createElement('div');
+  card.className = 'guide-card';
+  card.style.setProperty('--dc', d.color);
+  card.innerHTML = `
+    <div class="gc-hand">${fingersEmoji[i]}</div>
+    <div class="gc-count">${d.fingers} finger${d.fingers===1?'':'s'} · ${fingersLabel[i]}</div>
+    <h3>${d.name}</h3>
+    <div class="gc-kanji">${d.kanji}</div>
+    <p>${d.desc}</p>
+    <div class="gc-sign">Cast with <span>${fingersEmoji[i]} ${d.fingers} finger${d.fingers===1?'':'s'}</span> → activates instantly</div>
+  `;
+  card.addEventListener('click', ()=> triggerDomain(i, true));
+  guideGrid.appendChild(card);
+});
+
+/* ---------- TOAST ---------- */
+let toastTimer;
+function showToast(msg){
+  toast.style.setProperty('--dc', activeDomain ? activeDomain.color : '#b388ff');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> toast.classList.remove('show'), 2600);
+}
+
+/* ---------- AUDIO (WebAudio synth — no files needed) ---------- */
+function initAudio(){
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }catch(e){ audioCtx = null; }
+}
+function playBoom(){
+  if(!audioCtx) return;
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  const t = audioCtx.currentTime;
+  // deep sub boom
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(80, t);
+  o.frequency.exponentialRampToValueAtTime(28, t+0.6);
+  g.gain.setValueAtTime(0.7, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.9);
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start(t); o.stop(t+1);
+  // rising shimmer
+  const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
+  o2.type = 'sawtooth'; o2.frequency.setValueAtTime(90, t);
+  o2.frequency.exponentialRampToValueAtTime(1400, t+0.8);
+  g2.gain.setValueAtTime(0.08, t);
+  g2.gain.exponentialRampToValueAtTime(0.001, t+0.9);
+  const f = audioCtx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=2500;
+  o2.connect(f); f.connect(g2); g2.connect(audioCtx.destination);
+  o2.start(t); o2.stop(t+1);
+}
+
+/* ---------- DOMAIN ACTIVATION ---------- */
+function triggerDomain(idx, manual = false){
+  const d = DOMAINS[idx];
+  const prev = activeDomain;
+  activeDomain = d;
+
+  // set paint colors
+  document.documentElement.style.setProperty('--dc', d.color);
+
+  // camera filter changes
+  cam.style.filter =
+    `saturate(${idx===5 ? 0.5 : 1.3}) contrast(${idx===4 ? 1.4 : 1.1}) ` +
+    `hue-rotate(${(idx*35)%360}deg) drop-shadow(0 0 18px ${d.color}88)`;
+
+  // flash + ring
+  actFlash.style.setProperty('--dc', d.color);
+  actRing.style.setProperty('--dc', d.color);
+  actFlash.classList.remove('flash'); void actFlash.offsetWidth; actFlash.classList.add('flash');
+  actRing.classList.remove('ring'); void actRing.offsetWidth; actRing.classList.add('ring');
+
+  // overlay layers
+  overlayKanji.textContent = d.kanji;
+  overlayKanji.style.setProperty('--dc', d.color);
+  overlay.querySelector('.do-vignette').style.setProperty('--dc', d.color + '55');
+  overlay.classList.add('active');
+  setTimeout(()=> overlay.classList.remove('active'), 1400);
+
+  // sound + toast
+  if(prev !== d){
+    playBoom();
+    showToast(`領域展開 — ${d.name} ・ ${d.kanji}`);
+  }
+
+  // character display
+  ddCharImg.src = d.img;
+  ddCharImg.style.opacity = 0;
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      ddCharImg.style.opacity = 1;
+    });
+  });
+  ddCharacterName.textContent = d.char;
+  ddTag.textContent = d.name;
+  ddName.textContent = d.name;
+  ddKanji.textContent = d.kanji;
+  ddUser.textContent = d.user;
+  ddDesc.textContent = d.desc;
+  ddKanjiBg.textContent = d.bigKanji;
+  domainDisplay.style.setProperty('--dc', d.color);
+  ddKanjiBg.style.setProperty('--dc', d.color + '1c');
+  ddCharImg.style.setProperty('--dc', d.color);
+  ddPlaceholder.style.display = 'none';
+  ddInner.style.display = 'flex';
+  domainDisplay.classList.add('active');
+
+  domainNameEl.textContent = d.name;
+}
+
+/* ---------- FINGER COUNT DETECTION ---------- */
+function countFingers(landmarks){
+  // MediaPipe hand landmark indices
+  const tips   = [4, 8, 12, 16, 20];   // thumb, index, middle, ring, pinky
+  const pips   = [3, 6, 10, 14, 18];   // PIP joints (thumb IP)
+  const mcp    = [5, 9, 13, 17];        // MCP joints for curling check (excluding thumb)
+
+  let count = 0;
+
+  // Thumb: compare x-distance from wrist (landmark 0), mirrored for right/left
+  const wrist = landmarks[0];
+  const thumbTip = landmarks[4], thumbPip = landmarks[3];
+  // works in mirrored space
+  if(Math.abs(thumbTip.x - wrist.x) > Math.abs(thumbPip.x - wrist.x) + 0.03) count++;
+
+  // Other 4 fingers: tip Y must be higher (smaller) than PIP Y
+  for(let f=1; f<5; f++){
+    const tip = landmarks[tips[f]], pip = landmarks[pips[f]];
+    if(tip.y < pip.y - 0.03) count++;
+  }
+  return count;
+}
+
+/* ---------- HOLD-TO-CAST (domain signal with stability) ---------- */
+function onFingerCount(count){
+  fingerCountEl.textContent = count;
+  if(count === lastFingerCount){
+    // stable — accumulate hold time
+    if(!stableSince) stableSince = performance.now();
+    const held = performance.now() - stableSince;
+    if(held > 450){
+      // hold complete → trigger (only if changed)
+      if(activeDomain && activeDomain.fingers === count) return;
+      const d = DOMAINS.find(x=>x.fingers===count);
+      if(d) triggerDomain(d.idx);
+    }
+  }else{
+    lastFingerCount = count;
+    stableSince = performance.now();
+  }
+}
+
+/* ---------- FX PARTICLE ENGINE ---------- */
+const particles = [];
+const N_PARTICLES = 120;
+function spawnParticle(){
+  return {
+    x: fx.width * (0.1 + Math.random()*0.8),
+    y: fx.height * (0.1 + Math.random()*0.8),
+    vx: (Math.random()-0.5)*1.6,
+    vy: (Math.random()-0.5)*1.6,
+    r: Math.random()*3.2 + 1,
+    life: 1,
+    decay: 0.004 + Math.random()*0.008,
+    color: activeDomain ? activeDomain.color : '#b388ff',
+    burst: false
+  };
+}
+for(let i=0;i<N_PARTICLES;i++) particles.push(spawnParticle());
+
+function drawFX(){
+  fctx.clearRect(0,0,fx.width,fx.height);
+  const W = fx.width, H = fx.height;
+
+  // base cursed energy haze when domain active
+  if(activeDomain){
+    const g = fctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.6);
+    g.addColorStop(0, activeDomain.color + '00');
+    g.addColorStop(0.6, activeDomain.color + '22');
+    g.addColorStop(1, activeDomain.color + '00');
+    fctx.fillStyle = g;
+    fctx.fillRect(0,0,W,H);
+  }
+
+  // particles
+  for(let i=0;i<particles.length;i++){
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.life -= p.decay;
+    if(p.life <= 0){
+      particles[i] = spawnParticle();
+      continue;
+    }
+    // swirl toward center when domain active
+    if(activeDomain){
+      const dx = W/2 - p.x, dy = H/2 - p.y;
+      const dist = Math.hypot(dx,dy) || 1;
+      p.vx += (dx/dist)*0.04;
+      p.vy += (dy/dist)*0.04;
+      p.vx *= 0.99; p.vy *= 0.99;
+    }
+    const alpha = p.life * 0.5;
+    fctx.beginPath();
+    fctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    fctx.fillStyle = p.color;
+    fctx.globalAlpha = alpha;
+    fctx.shadowBlur = 12;
+    fctx.shadowColor = p.color;
+    fctx.fill();
+  }
+  fctx.globalAlpha = 1;
+  fctx.shadowBlur = 0;
+
+  // rotating kanji ring (domain active)
+  if(activeDomain){
+    const t = performance.now()/1000;
+    const cx = W/2, cy = H/2, R = Math.min(W,H)*0.22;
+    fctx.font = '900 26px "Noto Serif JP",serif';
+    fctx.textAlign = 'center';
+    fctx.textBaseline = 'middle';
+    for(let i=0;i<8;i++){
+      const a = t*0.6 + i*Math.PI/4;
+      const x = cx + Math.cos(a)*R, y = cy + Math.sin(a)*R;
+      fctx.save();
+      fctx.translate(x,y);
+      fctx.rotate(a);
+      fctx.globalAlpha = 0.5 + 0.5*Math.sin(t*2+i);
+      fctx.fillStyle = activeDomain.color;
+      fctx.shadowBlur = 20; fctx.shadowColor = activeDomain.color;
+      fctx.fillText(activeDomain.bigKanji, 0, 0);
+      fctx.restore();
+    }
+    // expanding ring shockwave
+    const ringT = (t % 2.4)/2.4;
+    fctx.beginPath();
+    fctx.arc(cx,cy, 30 + ringT*Math.min(W,H)*0.7, 0, Math.PI*2);
+    fctx.strokeStyle = activeDomain.color;
+    fctx.globalAlpha = (1-ringT)*0.5;
+    fctx.lineWidth = 3;
+    fctx.stroke();
+    fctx.globalAlpha = 1;
+  }
+  rafId = requestAnimationFrame(drawFX);
+}
+drawFX();
+
+/* ---------- HAND SIGNAL LOOP ---------- */
+function onVideoFrame(){
+  if(!handDetector || !camRunning) return;
+  if(cam.currentTime === lastVideoTime) { rafId = requestAnimationFrame(onVideoFrame); return; }
+  lastVideoTime = cam.currentTime;
+
+  try{
+    const res = handDetector.detectForVideo(cam, performance.now());
+    if(res.landmarks && res.landmarks.length > 0){
+      const lm = res.landmarks[0];
+      const count = countFingers(lm);
+      onFingerCount(count);
+    }else{
+      onFingerCount(-1);
+      fingerCountEl.textContent = '–';
+    }
+  }catch(e){}
+
+  rafId = requestAnimationFrame(onVideoFrame);
+}
+
+/* ---------- CAMERA ---------- */
+async function startCamera(){
+  try{
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: {ideal:1280}, height:{ideal:720} }
+    });
+    cam.srcObject = cameraStream;
+    await cam.play();
+    camRunning = true;
+    $('camDot').classList.add('on');
+    $('camStatus').textContent = 'Camera online — form your hand sign';
+    $('scStartBtn').textContent = '📷 Camera Active';
+    cam.style.opacity = 1;
+    initAudio();
+  }catch(e){
+    $('camStatus').textContent = 'Camera denied — using manual casting';
+    enterManualMode();
+    showToast('Camera unavailable — click a domain card to cast');
+  }
+}
+
+function stopCamera(){
+  if(cameraStream){
+    cameraStream.getTracks().forEach(t=>t.stop());
+    cameraStream = null;
+  }
+  camRunning = false;
+  $('camDot').classList.remove('on');
+  $('camStatus').textContent = 'Camera offline';
+  $('scStartBtn').textContent = '⚡ Activate Camera';
+}
+
+function enterManualMode(){
+  manualMode = true;
+  $('manualRow').style.display = 'flex';
+}
+
+/* ---------- LOAD MEDIAPIPE ---------- */
+async function loadHandModel(){
+  mpLoading = true;
+  $('camStatus').textContent = 'Loading cursed energy model…';
+  try{
+    const vision = await import(/* @vite-ignore */ 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.js');
+    const { HandLandmarker, FilesetResolver } = vision;
+    const fileset = await FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+    );
+    handDetector = await HandLandmarker.createFromOptions(fileset, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+        delegate: 'GPU'
+      },
+      runningMode: 'VIDEO',
+      numHands: 2,
+      minHandDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5
+    });
+    mpLoading = false;
+    $('camStatus').textContent = 'Model loaded — activate camera';
+    showToast('Cursed energy model locked in ⚡');
+  }catch(e){
+    mpLoading = false;
+    console.error('MediaPipe failed:', e);
+    enterManualMode();
+    showToast('Hand model offline — manual casting enabled');
+  }
+}
+
+/* ---------- BUTTONS ---------- */
+$('scStartBtn').addEventListener('click', ()=>{
+  if(camRunning){
+    stopCamera();
+  }else{
+    if(!handDetector && !mpLoading) loadHandModel().then(startCamera);
+    else startCamera();
+  }
+});
+
+document.querySelectorAll('.manual-row .mbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    triggerDomain(parseInt(btn.dataset.idx), true);
+  });
+});
+
+/* auto-load model on page load */
+window.addEventListener('load', ()=>{
+  if('mediaDevices' in navigator){
+    loadHandModel();
+  }else{
+    enterManualMode();
+    showToast('Camera not supported — manual casting enabled');
+  }
+});
+</script>
+</body>
+</html>

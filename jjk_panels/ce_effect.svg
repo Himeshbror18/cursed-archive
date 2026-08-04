@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <!-- Core dark blue radial gradient -->
+    <radialGradient id="coreGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1a1a4e"/>
+      <stop offset="40%" stop-color="#1e2a6e"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <!-- Inner glow - bright blue-purple -->
+    <radialGradient id="innerGlow" cx="50%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#7b2fff" stop-opacity="0.9"/>
+      <stop offset="30%" stop-color="#5b1fcc" stop-opacity="0.6"/>
+      <stop offset="70%" stop-color="#3d10a0" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <!-- Mid aura - purple-violet -->
+    <radialGradient id="midAura" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#9b30ff" stop-opacity="0.5"/>
+      <stop offset="40%" stop-color="#6a1b9a" stop-opacity="0.3"/>
+      <stop offset="80%" stop-color="#4a0e7a" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <!-- Outer glow - deep violet -->
+    <radialGradient id="outerGlow" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#c77dff" stop-opacity="0.3"/>
+      <stop offset="35%" stop-color="#8b2fcf" stop-opacity="0.15"/>
+      <stop offset="70%" stop-color="#4a1080" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <!-- Hand glow -->
+    <radialGradient id="handGlow" cx="50%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#5b1fcc" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#3d10a0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <!-- Swirl gradient -->
+    <linearGradient id="swirlGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7b2fff" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#9b30ff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#c77dff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Secondary swirl -->
+    <linearGradient id="swirlGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5b1fcc" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#7b2fff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3d10a0" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Core pulse gradient -->
+    <radialGradient id="pulseCore" cx="50%" cy="40%" r="30%">
+      <stop offset="0%" stop-color="#e0b0ff" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#9b30ff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Outer glow layers -->
+  <ellipse cx="200" cy="180" rx="180" ry="200" fill="url(#outerGlow)"/>
+  <ellipse cx="200" cy="180" rx="140" ry="160" fill="url(#midAura)"/>
+  <ellipse cx="200" cy="180" rx="100" ry="120" fill="url(#innerGlow)"/>
+
+  <!-- Swirling energy tendrils -->
+  <path d="M200,180 C160,120 100,100 80,160 C60,220 120,260 180,220 C240,180 220,100 200,80"
+        fill="none" stroke="url(#swirlGrad)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+  <path d="M200,180 C240,120 300,100 320,160 C340,220 280,260 220,220 C160,180 180,100 200,80"
+        fill="none" stroke="url(#swirlGrad2)" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M200,180 C140,140 60,140 50,200 C40,260 100,300 160,260 C220,220 200,160 200,140"
+        fill="none" stroke="url(#swirlGrad)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <path d="M200,180 C260,140 340,140 350,200 C360,260 300,300 240,260 C180,220 200,160 200,140"
+        fill="none" stroke="url(#swirlGrad2)" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- Additional smaller swirls -->
+  <path d="M200,180 C170,150 120,150 110,190 C100,230 140,250 175,230"
+        fill="none" stroke="#9b30ff" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M200,180 C230,150 280,150 290,190 C300,230 260,250 225,230"
+        fill="none" stroke="#7b2fff" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <path d="M200,180 C180,160 140,170 130,200 C120,230 150,250 180,240"
+        fill="none" stroke="#c77dff" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+  <path d="M200,180 C220,160 260,170 270,200 C280,230 250,250 220,240"
+        fill="none" stroke="#c77dff" stroke-width="1" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- Core energy burst -->
+  <circle cx="200" cy="180" r="60" fill="url(#coreGrad)"/>
+  <circle cx="200" cy="180" r="40" fill="url(#pulseCore)"/>
+  <circle cx="200" cy="180" r="15" fill="#d4a0ff" opacity="0.6"/>
+  <circle cx="200" cy="180" r="8" fill="#ffffff" opacity="0.9"/>
+
+  <!-- Hand silhouette at bottom -->
+  <g transform="translate(200, 400)" fill="url(#handGlow)" stroke="#5b1fcc" stroke-width="0.5">
+    <!-- Palm -->
+    <ellipse cx="0" cy="0" rx="55" ry="35"/>
+    <!-- Fingers -->
+    <path d="M-40,-30 C-45,-60 -35,-85 -20,-95 C-10,-100 5,-95 10,-85 C15,-75 10,-50 5,-35" fill="#5b1fcc" opacity="0.8"/>
+    <path d="M-20,-35 C-22,-65 -15,-90 0,-100 C10,-105 15,-95 12,-80 C10,-65 5,-40 0,-35" fill="#5b1fcc" opacity="0.8"/>
+    <path d="M0,-35 C-2,-65 5,-90 20,-100 C30,-105 35,-95 32,-80 C30,-65 20,-40 15,-35" fill="#5b1fcc" opacity="0.8"/>
+    <path d="M20,-30 C18,-55 25,-78 40,-88 C48,-93 55,-85 52,-72 C50,-60 40,-40 35,-30" fill="#5b1fcc" opacity="0.8"/>
+    <path d="M35,-20 C38,-45 48,-65 60,-72 C68,-77 72,-68 68,-58 C64,-48 50,-35 45,-25" fill="#5b1fcc" opacity="0.7"/>
+    <!-- Thumb -->
+    <path d="M-50,-10 C-65,-20 -75,-5 -70,10 C-65,20 -50,25 -40,15" fill="#5b1fcc" opacity="0.7"/>
+  </g>
+
+  <!-- Energy particles floating -->
+  <circle cx="120" cy="140" r="3" fill="#c77dff" opacity="0.6"/>
+  <circle cx="280" cy="130" r="2.5" fill="#9b30ff" opacity="0.5"/>
+  <circle cx="150" cy="250" r="2" fill="#7b2fff" opacity="0.4"/>
+  <circle cx="250" cy="240" r="3" fill="#c77dff" opacity="0.5"/>
+  <circle cx="100" cy="200" r="2" fill="#5b1fcc" opacity="0.4"/>
+  <circle cx="300" cy="200" r="2.5" fill="#7b2fff" opacity="0.45"/>
+  <circle cx="170" cy="100" r="1.5" fill="#d4a0ff" opacity="0.5"/>
+  <circle cx="230" cy="105" r="2" fill="#c77dff" opacity="0.4"/>
+  <circle cx="90" cy="170" r="1.5" fill="#9b30ff" opacity="0.35"/>
+  <circle cx="310" cy="170" r="2" fill="#5b1fcc" opacity="0.4"/>
+
+  <!-- Energy ring around core -->
+  <circle cx="200" cy="180" r="90" fill="none" stroke="#7b2fff" stroke-width="1" opacity="0.3" stroke-dasharray="8 12"/>
+  <circle cx="200" cy="180" r="110" fill="none" stroke="#9b30ff" stroke-width="0.8" opacity="0.2" stroke-dasharray="5 15"/>
+  <circle cx="200" cy="180" r="130" fill="none" stroke="#5b1fcc" stroke-width="0.5" opacity="0.15" stroke-dasharray="3 20"/>
+</svg>

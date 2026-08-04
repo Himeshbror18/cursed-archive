@@ -1,0 +1,9 @@
+gojo_ce.png || RESOLVE_FAILED
+itadori_color.png || RESOLVE_FAILED
+sukuna.png || https://static.wikia.nocookie.net/jujutsu-kaisen/images/3/3a/SukunaP.png/revision/latest?cb=20231029235820
+mahito.png || https://static.wikia.nocookie.net/jujutsu-kaisen/images/e/ec/MahitoP.png/revision/latest?cb=20200524042847
+geto.png || RESOLVE_FAILED
+mahito_domain.png || RESOLVE_FAILED
+black_flash.png || https://static.wikia.nocookie.net/jujutsu-kaisen/images/7/77/Black_Bird_Manipulation.png/revision/latest?cb=20210204004001
+finger.png || https://static.wikia.nocookie.net/jujutsu-kaisen/images/f/f9/FingerBearerP.png/revision/latest?cb=20210901230950
+sukuna_rampage.png || RESOLVE_FAILED

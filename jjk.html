@@ -248,32 +248,20 @@
     filter:blur(20px);
   }
   .char-card:hover .aura{opacity:0.9;}
-  /* anime-style cursed energy flame — sprite sheet animation */
+  /* procedural cursed energy flame — mix-blend-mode:screen removes black bg */
   .ce-flame{
     position:absolute;z-index:2;width:150px;height:180px;pointer-events:none;
     opacity:0;transition:opacity .6s,transform .6s;
     mix-blend-mode:screen;
     transform:scale(0.5) rotate(-6deg);
+    animation:flameFlicker 1.4s ease-in-out infinite;
   }
-  .ce-flame .flame-sprite{
-    width:100%;height:100%;
-    background-size:800% 100%;  /* 8 frames horizontal */
-    background-repeat:no-repeat;
-    animation:flamePlay 0.7s steps(7) infinite;
-  }
+  .ce-flame img{width:100%;height:100%;object-fit:contain;}
   .char-card:hover .ce-flame{opacity:1;transform:scale(1) rotate(0deg);}
-  @keyframes flamePlay{
-    0%{background-position:0 0;}
-    100%{background-position:100% 0;}
+  @keyframes flameFlicker{
+    0%,100%{filter:brightness(1) saturate(1);}
+    50%{filter:brightness(1.35) saturate(1.25);}
   }
-  /* domain hover video (animated webp) */
-  .domain-card .img-wrap .anim{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    opacity:0;transition:opacity .5s;z-index:1;
-  }
-  .domain-card:hover .img-wrap .anim{opacity:1;}
-  .domain-card .img-wrap .anim + img{transition:opacity .5s;}
-  .domain-card:hover .img-wrap .anim + img{opacity:0;}
   .char-card .info{padding:1.5rem;position:relative;z-index:3;}
   .char-card .info .name{font-size:1.4rem;font-weight:800;letter-spacing:1px;}
   .char-card .info .role{font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--cc,var(--gojo));margin-bottom:0.8rem;}
@@ -409,8 +397,7 @@
   <p class="sub">A compendium of the world of sorcerers — the flow of cursed energy, the art of Domain Expansion, the warriors who wield them, and the rules that governed the Shibuya Incident.</p>
   <div class="cta">
     <a href="#power" class="btn btn-primary">Explore the Power System</a>
-    <a href="domain-expansion.html" class="btn btn-ghost">⚡ Domain Expansion Simulator</a>
-    <a href="#domains" class="btn btn-ghost">Domains</a>
+    <a href="#domains" class="btn btn-ghost">Domain Expansion</a>
   </div>
   <div class="scroll-hint">SCROLL ▼</div>
 </header>
@@ -518,8 +505,8 @@
       <div class="char-card reveal" style="--cc:var(--gojo)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="left:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_blue.png')"></div></div>
-          <div class="ce-flame" style="right:6%;bottom:4%;animation-delay:0.5s;transform:scale(0.5) rotate(8deg);"><div class="flame-sprite" style="background-image:url('assets/ce/flame_blue.png')"></div></div>
+          <div class="ce-flame" style="left:6%;bottom:4%;"><img src="assets/ce/ce_blue.png" alt="Cursed energy"></div>
+          <div class="ce-flame" style="right:6%;bottom:4%;animation-delay:0.5s;transform:scale(0.5) rotate(8deg);"><img src="assets/ce/ce_blue.png" alt="Cursed energy"></div>
           <img src="assets/gojo.png" alt="Satoru Gojo">
         </div>
         <div class="info">
@@ -534,8 +521,8 @@
       <div class="char-card reveal" style="--cc:var(--itadori)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="left:4%;bottom:2%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_crimson.png')"></div></div>
-          <div class="ce-flame" style="right:4%;bottom:2%;animation-delay:0.4s;transform:scale(0.5) rotate(8deg);"><div class="flame-sprite" style="background-image:url('assets/ce/flame_crimson.png')"></div></div>
+          <div class="ce-flame" style="left:4%;bottom:2%;"><img src="assets/ce/ce_crimson.png" alt="Cursed energy"></div>
+          <div class="ce-flame" style="right:4%;bottom:2%;animation-delay:0.4s;transform:scale(0.5) rotate(8deg);"><img src="assets/ce/ce_crimson.png" alt="Cursed energy"></div>
           <img src="assets/itadori.png" alt="Yuji Itadori">
         </div>
         <div class="info">
@@ -550,7 +537,7 @@
       <div class="char-card reveal" style="--cc:var(--megumi)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="right:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_teal.png')"></div></div>
+          <div class="ce-flame" style="right:6%;bottom:4%;"><img src="assets/ce/ce_teal.png" alt="Cursed energy"></div>
           <img src="assets/megumi.png" alt="Megumi Fushiguro">
         </div>
         <div class="info">
@@ -565,7 +552,7 @@
       <div class="char-card reveal" style="--cc:var(--nobara)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="left:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_orange.png')"></div></div>
+          <div class="ce-flame" style="left:6%;bottom:4%;"><img src="assets/ce/ce_orange.png" alt="Cursed energy"></div>
           <img src="assets/nobara.png" alt="Nobara Kugisaki">
         </div>
         <div class="info">
@@ -580,8 +567,8 @@
       <div class="char-card reveal" style="--cc:var(--sukuna)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="left:8%;bottom:2%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_purple.png')"></div></div>
-          <div class="ce-flame" style="right:8%;bottom:2%;animation-delay:0.7s;transform:scale(0.5) rotate(8deg);"><div class="flame-sprite" style="background-image:url('assets/ce/flame_purple.png')"></div></div>
+          <div class="ce-flame" style="left:8%;bottom:2%;"><img src="assets/ce/ce_purple.png" alt="Cursed energy"></div>
+          <div class="ce-flame" style="right:8%;bottom:2%;animation-delay:0.7s;transform:scale(0.5) rotate(8deg);"><img src="assets/ce/ce_purple.png" alt="Cursed energy"></div>
           <img src="assets/sukuna.png" alt="Ryomen Sukuna">
         </div>
         <div class="info">
@@ -596,8 +583,8 @@
       <div class="char-card reveal" style="--cc:var(--geto)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="right:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_violet.png')"></div></div>
-          <img src="assets/geto.png" alt="Suguru Geto">
+          <div class="ce-flame" style="right:6%;bottom:4%;"><img src="assets/ce/ce_violet.png" alt="Cursed energy"></div>
+          <img src="assets/cursed_energy.png" alt="Suguru Geto">
         </div>
         <div class="info">
           <div class="name">Suguru Geto</div>
@@ -611,7 +598,7 @@
       <div class="char-card reveal" style="--cc:var(--toji)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="left:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_green.png')"></div></div>
+          <div class="ce-flame" style="left:6%;bottom:4%;"><img src="assets/ce/ce_green.png" alt="Cursed energy"></div>
           <img src="assets/toji.png" alt="Toji Fushiguro">
         </div>
         <div class="info">
@@ -626,7 +613,7 @@
       <div class="char-card reveal" style="--cc:var(--nanami)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="right:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_gold.png')"></div></div>
+          <div class="ce-flame" style="right:6%;bottom:4%;"><img src="assets/ce/ce_gold.png" alt="Cursed energy"></div>
           <img src="assets/nanami.png" alt="Kento Nanami">
         </div>
         <div class="info">
@@ -641,7 +628,7 @@
       <div class="char-card reveal" style="--cc:var(--mahito)">
         <div class="img-wrap">
           <div class="aura"></div>
-          <div class="ce-flame" style="left:6%;bottom:4%;"><div class="flame-sprite" style="background-image:url('assets/ce/flame_blue.png')"></div></div>
+          <div class="ce-flame" style="left:6%;bottom:4%;"><img src="assets/ce/ce_blue.png" alt="Cursed energy"></div>
           <img src="assets/mahito.png" alt="Mahito">
         </div>
         <div class="info">
@@ -667,7 +654,7 @@
 
     <div class="domain-grid">
       <div class="domain-card reveal" style="--dc:var(--gojo)">
-        <div class="img-wrap"><img class="anim" src="assets/gojo_domain_anim.webp" alt="Unlimited Void animated"><img src="assets/gojo_domain.png" alt="Unlimited Void"></div>
+        <div class="img-wrap"><img src="assets/gojo_domain.png" alt="Unlimited Void"></div>
         <div class="body">
           <div class="dname">Unlimited Void</div>
           <div class="duser">Satoru Gojo</div>
@@ -676,7 +663,7 @@
       </div>
 
       <div class="domain-card reveal" style="--dc:var(--sukuna)">
-        <div class="img-wrap"><img class="anim" src="assets/sukuna_domain_anim.webp" alt="Malevolent Shrine animated"><img src="assets/sukuna_domain.png" alt="Malevolent Shrine"></div>
+        <div class="img-wrap"><img src="assets/sukuna_domain.png" alt="Malevolent Shrine"></div>
         <div class="body">
           <div class="dname">Malevolent Shrine</div>
           <div class="duser">Ryomen Sukuna</div>
