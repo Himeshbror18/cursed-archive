@@ -388,7 +388,7 @@
   <div class="hero-bg"></div>
   <div class="kicker">領域展開 · Casting Chamber</div>
   <h1>DOMAIN EXPANSION<br>SIMULATOR</h1>
-  <p class="sub">Show your hand to the camera. The hand sign you form determines the Domain Expansion you cast — and the camera responds. A local Real-time-GesRec bridge can perform temporal gesture recognition; the browser landmark detector remains as a fallback. Form the seal, hold it, and watch the domain manifest.</p>
+  <p class="sub">Show your hand to the camera. The hand sign you form determines the Domain Expansion you cast — and the camera responds. The browser tracks your hand live, overlays the landmarks, and turns the selected character's cursed energy into feedback. Form the seal, hold it, and watch the domain manifest.</p>
   <div class="cta">
     <button class="btn btn-primary" id="scStartBtn">⚡ Activate Camera</button>
     <a href="#guide" class="btn btn-ghost">Learn the Hand Signs</a>
@@ -453,19 +453,18 @@
         <div class="big">領域展開</div>
         <h3>Awaiting Your Hand Seal</h3>
         <p>Activate the camera, then form a hand sign in front of it.<br>Hold the seal to manifest the domain.</p>
-        <div class="hint">✋ 0 · ☝ 1 · ✌ 2 · 🤟 3 · 🖖 4 · 🖐 5</div>
+        <div class="hint">✋ Practice the seal · hold steady · cast manually</div>
       </div>
     </div>
 
-    <!-- manual mode (fallback) -->
-    <div class="manual-row" id="manualRow" style="display:none;">
-      <button class="mbtn" data-idx="0">✊ Amplify</button>
-      <button class="mbtn" data-idx="1">☝ Domain Amplification</button>
-      <button class="mbtn" data-idx="2">✌ Unlimited Void</button>
-      <button class="mbtn" data-idx="3">🤟 Chimera Shadow Garden</button>
-      <button class="mbtn" data-idx="4">🖖 Malevolent Shrine</button>
-      <button class="mbtn" data-idx="5">🖐 Self-Embodiment</button>
+    <!-- manual casting / practice mode -->
+    <div class="manual-row" id="manualRow">
+      <button class="mbtn" data-idx="0">∞ Unlimited Void</button>
+      <button class="mbtn" data-idx="1">影 Chimera Shadow Garden</button>
+      <button class="mbtn" data-idx="2">魔 Malevolent Shrine</button>
+      <button class="mbtn" data-idx="3">円 Self-Embodiment</button>
     </div>
+    <p class="practice-note">Camera mode tracks your hand and gives you live visual feedback. It does <strong>not</strong> pretend that four finger-counts are the canon hand seals. Pick a domain above, form its reference seal, and use the camera as a practice mirror.</p>
 
   </div>
 </section>
@@ -476,7 +475,7 @@
     <div class="sec-head">
       <div class="tag">The Seals</div>
       <h2>Hand Signs & Their Domains</h2>
-      <p>In jujutsu, the hands seal the technique. With the optional Real-time-GesRec bridge, the simulator recognizes the trained hand-sign motion rather than pretending every seal is just a finger count. Browser landmark counting remains available as a lightweight fallback.</p>
+      <p>In jujutsu, the hands seal the technique. The camera tracks your hand in the browser and turns the live pose into cursed-energy feedback. The simulator intentionally does not claim that simple finger counting is the canon JJK hand-sign recognition model.</p>
     </div>
     <div class="guide-grid" id="guideGrid">
       <!-- cards injected by JS -->
@@ -503,60 +502,44 @@
 /* ---------- DOMAIN DATABASE ---------- */
 const DOMAINS = [
   {
-    idx: 0, fingers: 0, name: 'DOMAIN AMPLIFICATION',
-    kanji: '領域展開', bigKanji: '域', user: 'Generic Barrier Technique',
-    color: '#ff7043',
-    desc: 'A barrier technique that coats the body in cursed energy like armor. Not a true domain — but a raw surge of power that neutralizes techniques on contact.',
-    img: 'assets/black_flash.png', accent: '#ff7043', char: 'ITADORI / BLACK FLASH'
-  },
-  {
-    idx: 1, fingers: 1, name: 'CURSED TECHNIQUE EMBER',
-    kanji: '術式解放', bigKanji: '術', user: 'The Sorcerer\'s Release',
-    color: '#ffd54f',
-    desc: 'One finger raised — the seal of a sorcerer about to release their innate technique. A golden ember of cursed energy ignites around your form.',
-    img: 'assets/cursed_energy.png', accent: '#ffd54f', char: 'CURSED ENERGY'
-  },
-  {
-    idx: 2, fingers: 2, name: 'UNLIMITED VOID',
+    idx: 0, name: 'UNLIMITED VOID',
     kanji: '無量空処', bigKanji: '無', user: 'Satoru Gojo',
     color: '#4fc3f7',
-    desc: 'The two-finger seal of the strongest. An endless void floods the target\'s mind with infinite information — every sensation at once, paralyzing thought itself.',
-    img: 'assets/gojo.png', accent: '#4fc3f7', char: 'SATORU GOJO'
+    desc: 'Gojo’s Domain manifests Limitless as an overwhelming flood of information, immobilizing targets caught by its sure-hit effect.',
+    img: 'assets/gojo.png', accent: '#4fc3f7', char: 'SATORU GOJO',
+    seal: 'One-handed Buddhist-inspired seal'
   },
   {
-    idx: 3, fingers: 3, name: 'CHIMERA SHADOW GARDEN',
+    idx: 1, name: 'CHIMERA SHADOW GARDEN',
     kanji: '嵌合暗翳庭', bigKanji: '影', user: 'Megumi Fushiguro',
     color: '#26c6da',
-    desc: 'The three-fold shadow seal. The world becomes living shadow, and shikigami — Divine Dogs, Nue, Mahoraga — tear free from every surface.',
-    img: 'assets/megumi.png', accent: '#26c6da', char: 'MEGUMI FUSHIGURO'
+    desc: 'Megumi’s incomplete Domain fills the area with fluid shadows and lets his shikigami and shadow techniques emerge throughout the space.',
+    img: 'assets/megumi.png', accent: '#26c6da', char: 'MEGUMI FUSHIGURO',
+    seal: 'Two-handed shadow seal'
   },
   {
-    idx: 4, fingers: 4, name: 'MALEVOLENT SHRINE',
+    idx: 2, name: 'MALEVOLENT SHRINE',
     kanji: '伏魔御厨子', bigKanji: '魔', user: 'Ryomen Sukuna',
     color: '#b388ff',
-    desc: 'Four fingers — the King of Curses. An open-barrier domain with no escape; Cleave and Dismantle rain down as an unavoidable storm. Nothing survives.',
-    img: 'assets/sukuna.png', accent: '#b388ff', char: 'RYOMEN SUKUNA'
+    desc: 'Sukuna’s Domain manifests an open barrier and applies Cleave and Dismantle across its effective range. It does not use a conventional enclosing shell.',
+    img: 'assets/sukuna.png', accent: '#b388ff', char: 'RYOMEN SUKUNA',
+    seal: 'Two-handed shrine seal'
   },
   {
-    idx: 5, fingers: 5, name: 'SELF-EMBODIMENT OF PERFECTION',
+    idx: 3, name: 'SELF-EMBODIMENT OF PERFECTION',
     kanji: '自閉円頓裹', bigKanji: '円', user: 'Mahito',
     color: '#cfd8dc',
-    desc: 'All five fingers — the dome of countless hands. Within, Idle Transfiguration is a guaranteed hit; a single touch reshapes soul and body forever.',
-    img: 'assets/mahito.png', accent: '#cfd8dc', char: 'MAHITO'
+    desc: 'Mahito’s Domain amplifies Idle Transfiguration so the technique can affect souls within the Domain without his normal need for physical contact.',
+    img: 'assets/mahito.png', accent: '#cfd8dc', char: 'MAHITO',
+    seal: 'Distinctive hand seal formed with Mahito’s mouth'
   }
 ];
 
 /* ---------- STATE ---------- */
 let activeDomain = null;       // DOMAINS entry
 let domainSignalTimer = null;  // hold-to-activate timer
-let lastFingerCount = -1;
-let stableSince = 0;
 let handDetector = null;
 let cameraStream = null;
-let gestureBackend = 'offline';
-let gesturePollTimer = null;
-let gestureSending = false;
-const GESTURE_API = 'http://127.0.0.1:8765';
 let camRunning = false;
 let lastVideoTime = -1;
 let rafId = null;
@@ -581,8 +564,8 @@ stageFrame.appendChild(backendBadge);
 const toast = $('toast');
 
 /* ---------- BUILD GUIDE CARDS ---------- */
-const fingersEmoji = ['✊','☝','✌','🤟','🖖','🖐'];
-const fingersLabel = ['Fist','Index','Peace','Three','Four','Open Palm'];
+const fingersEmoji = ['∞','影','魔','円'];
+const fingersLabel = ['Gojo seal','Megumi seal','Sukuna seal','Mahito seal'];
 const guideGrid = $('guideGrid');
 DOMAINS.forEach((d,i)=>{
   const card = document.createElement('div');
@@ -590,11 +573,11 @@ DOMAINS.forEach((d,i)=>{
   card.style.setProperty('--dc', d.color);
   card.innerHTML = `
     <div class="gc-hand">${fingersEmoji[i]}</div>
-    <div class="gc-count">${d.fingers} finger${d.fingers===1?'':'s'} · ${fingersLabel[i]}</div>
+    <div class="gc-count">${fingersLabel[i]}</div>
     <h3>${d.name}</h3>
     <div class="gc-kanji">${d.kanji}</div>
     <p>${d.desc}</p>
-    <div class="gc-sign">Cast with <span>${fingersEmoji[i]} ${d.fingers} finger${d.fingers===1?'':'s'}</span> → activates instantly</div>
+    <div class="gc-sign">Practice <span>${d.seal}</span> → then cast manually</div>
   `;
   card.addEventListener('click', ()=> triggerDomain(i, true));
   guideGrid.appendChild(card);
@@ -709,46 +692,37 @@ function triggerDomain(idx, manual = false){
   triggerCharacterFX(d);
 }
 
-/* ---------- FINGER COUNT DETECTION ---------- */
-function countFingers(landmarks){
-  // MediaPipe hand landmark indices
-  const tips   = [4, 8, 12, 16, 20];   // thumb, index, middle, ring, pinky
-  const pips   = [3, 6, 10, 14, 18];   // PIP joints (thumb IP)
-  const mcp    = [5, 9, 13, 17];        // MCP joints for curling check (excluding thumb)
-
-  let count = 0;
-
-  // Thumb: compare x-distance from wrist (landmark 0), mirrored for right/left
-  const wrist = landmarks[0];
-  const thumbTip = landmarks[4], thumbPip = landmarks[3];
-  // works in mirrored space
-  if(Math.abs(thumbTip.x - wrist.x) > Math.abs(thumbPip.x - wrist.x) + 0.03) count++;
-
-  // Other 4 fingers: tip Y must be higher (smaller) than PIP Y
-  for(let f=1; f<5; f++){
-    const tip = landmarks[tips[f]], pip = landmarks[pips[f]];
-    if(tip.y < pip.y - 0.03) count++;
-  }
-  return count;
+/* ---------- HAND TRACKING FEEDBACK ---------- */
+function onVideoFrame(){
+  if(!camRunning || !handDetector) return;
+  if(cam.currentTime === lastVideoTime){ requestAnimationFrame(onVideoFrame); return; }
+  lastVideoTime = cam.currentTime;
+  try{
+    const res = handDetector.detectForVideo(cam, performance.now());
+    if(res.landmarks && res.landmarks.length){
+      drawHandFeedback(res.landmarks);
+      fingerCountEl.textContent = res.landmarks.length === 1 ? '1 hand tracked' : res.landmarks.length + ' hands tracked';
+    }else{
+      fingerCountEl.textContent = 'No hand';
+    }
+  }catch(e){}
+  requestAnimationFrame(onVideoFrame);
 }
 
-/* ---------- HOLD-TO-CAST (domain signal with stability) ---------- */
-function onFingerCount(count){
-  fingerCountEl.textContent = count;
-  if(count === lastFingerCount){
-    // stable — accumulate hold time
-    if(!stableSince) stableSince = performance.now();
-    const held = performance.now() - stableSince;
-    if(held > 450){
-      // hold complete → trigger (only if changed)
-      if(activeDomain && activeDomain.fingers === count) return;
-      const d = DOMAINS.find(x=>x.fingers===count);
-      if(d) triggerDomain(d.idx);
-    }
-  }else{
-    lastFingerCount = count;
-    stableSince = performance.now();
+function drawHandFeedback(hands){
+  fctx.save();
+  fctx.lineWidth = 3;
+  fctx.shadowBlur = 14;
+  const color = activeDomain ? activeDomain.color : '#b388ff';
+  fctx.strokeStyle = color;
+  fctx.fillStyle = color;
+  for(const hand of hands){
+    const pts = hand.map(p=>({x:p.x*fx.width,y:p.y*fx.height}));
+    const edges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+    for(const [a,b] of edges){ fctx.beginPath(); fctx.moveTo(pts[a].x,pts[a].y); fctx.lineTo(pts[b].x,pts[b].y); fctx.stroke(); }
+    for(const p of pts){ fctx.beginPath(); fctx.arc(p.x,p.y,4,0,Math.PI*2); fctx.fill(); }
   }
+  fctx.restore();
 }
 
 /* ---------- FX PARTICLE ENGINE ---------- */
@@ -885,7 +859,7 @@ async function sendGestureFrame(){
 
 /* ---------- BROWSER FALLBACK ---------- */
 function onVideoFrame(){
-  if(!camRunning || gestureBackend !== 'browser' || !handDetector) return;
+  if(!camRunning || !handDetector) return;
   if(cam.currentTime === lastVideoTime){ requestAnimationFrame(onVideoFrame); return; }
   lastVideoTime = cam.currentTime;
   try{
@@ -896,8 +870,7 @@ function onVideoFrame(){
   requestAnimationFrame(onVideoFrame);
 }
 
-function startGesturePolling(){
-  clearInterval(gesturePollTimer);
+
   gesturePollTimer=setInterval(sendGestureFrame,140);
 }
 
@@ -915,9 +888,7 @@ async function startCamera(){
     $('scStartBtn').textContent = '📷 Camera Active';
     cam.style.opacity = 1;
     initAudio();
-    await probeGestureBackend();
-    if(gestureBackend === 'gesrec') startGesturePolling();
-    else if(handDetector) requestAnimationFrame(onVideoFrame);
+    if(handDetector) requestAnimationFrame(onVideoFrame);
   }catch(e){
     $('camStatus').textContent = 'Camera denied — using manual casting';
     enterManualMode();
@@ -931,8 +902,6 @@ function stopCamera(){
     cameraStream = null;
   }
   camRunning = false;
-  clearInterval(gesturePollTimer);
-  gesturePollTimer = null;
   $('camDot').classList.remove('on');
   $('camStatus').textContent = 'Camera offline';
   $('scStartBtn').textContent = '⚡ Activate Camera';
@@ -980,8 +949,7 @@ $('scStartBtn').addEventListener('click', async ()=>{
     stopCamera();
     return;
   }
-  if(gestureBackend === 'offline') await probeGestureBackend();
-  if(gestureBackend === 'browser' && !handDetector && !mpLoading) await loadHandModel();
+  if(!handDetector && !mpLoading) await loadHandModel();
   await startCamera();
 });
 
@@ -998,8 +966,7 @@ window.addEventListener('load', async ()=>{
     showToast('Camera not supported — manual casting enabled');
     return;
   }
-  const gesrecAvailable = await probeGestureBackend();
-  if(!gesrecAvailable) loadHandModel();
+  loadHandModel();
 });
 </script>
 </body>
