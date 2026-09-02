@@ -975,13 +975,14 @@ async function loadHandModel(){
 }
 
 /* ---------- BUTTONS ---------- */
-$('scStartBtn').addEventListener('click', ()=>{
+$('scStartBtn').addEventListener('click', async ()=>{
   if(camRunning){
     stopCamera();
-  }else{
-    if(!handDetector && !mpLoading) loadHandModel().then(startCamera);
-    else startCamera();
+    return;
   }
+  if(gestureBackend === 'offline') await probeGestureBackend();
+  if(gestureBackend === 'browser' && !handDetector && !mpLoading) await loadHandModel();
+  await startCamera();
 });
 
 document.querySelectorAll('.manual-row .mbtn').forEach(btn=>{
@@ -991,13 +992,14 @@ document.querySelectorAll('.manual-row .mbtn').forEach(btn=>{
 });
 
 /* auto-load model on page load */
-window.addEventListener('load', ()=>{
-  if('mediaDevices' in navigator){
-    loadHandModel();
-  }else{
+window.addEventListener('load', async ()=>{
+  if(!('mediaDevices' in navigator)){
     enterManualMode();
     showToast('Camera not supported — manual casting enabled');
+    return;
   }
+  const gesrecAvailable = await probeGestureBackend();
+  if(!gesrecAvailable) loadHandModel();
 });
 </script>
 </body>
