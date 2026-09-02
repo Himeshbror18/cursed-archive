@@ -446,6 +446,12 @@
   .scroll-hint{font-size:.65rem;letter-spacing:3px;}
   @media(max-width:800px){.hero{min-height:86vh;padding:6rem 1.3rem 5rem;}.hero-bg img{mask-image:linear-gradient(90deg,black,transparent 90%);-webkit-mask-image:linear-gradient(90deg,black,transparent 90%);}.domain-grid,.de-grid{grid-template-columns:1fr;}.sec-head{margin-bottom:2.2rem;}}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}}
+
+  /* ===== PORTAL / INDEX POLISH ===== */
+  .incident-portal{padding:6rem 2rem;background:#06060a;}
+  .portal-card{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:2.2rem;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:linear-gradient(120deg,rgba(18,17,28,.9),rgba(10,10,14,.88));box-shadow:0 24px 70px rgba(0,0,0,.4);}
+  .portal-card .tag{font-size:.65rem;letter-spacing:3px;color:#9b93ff;margin-bottom:.55rem}.portal-card h2{font-size:clamp(1.8rem,4vw,2.7rem)}.portal-card p{max-width:680px;color:#9e9eaa;line-height:1.75;margin-top:.7rem;font-size:.9rem}.portal-card .btn{white-space:nowrap}
+  @media(max-width:700px){.portal-card{align-items:flex-start;flex-direction:column}.portal-card .btn{width:100%;text-align:center}}
 </style>
 </head>
 <body>
@@ -813,70 +819,16 @@
   </div>
 </section>
 
-<!-- SEASON 2 -->
-<section id="season2" style="background:linear-gradient(180deg,var(--bg),#0d0d1a,var(--bg));">
+<!-- INCIDENT LOG -->
+<section class="incident-portal">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="tag">The Turning Point</div>
-      <h2>Season 2 — The Rules of Chaos</h2>
-      <p>Two arcs that reshaped the world of jujutsu: the tragedy of the past, and the night Shibuya burned.</p>
-    </div>
-
-    <div class="s2-grid">
-      <!-- HIDDEN INVENTORY -->
-      <div class="arc-card reveal" style="--ac:var(--gojo)">
-        <div class="img-wrap"><img src="assets/riko.png" alt="Hidden Inventory"></div>
-        <div class="body">
-          <div class="arc-tag">Arc 1 · Hidden Inventory / Premature Death</div>
-          <h3>The Fall of the Strongest</h3>
-          <p>Years before the main story, a young Satoru Gojo and Suguru Geto were tasked with protecting Riko Amanai — the Star Plasma Vessel — from assassination. The mission ended in tragedy, shattering their friendship and setting Geto on a path of darkness.</p>
-          <ul class="rule-list">
-            <li><span class="num">1</span><span><strong>The Star Plasma Vessel</strong> — Riko Amanai was to merge with Tengen to preserve the barrier protecting Jujutsu High. Her death was the catalyst for everything.</span></li>
-            <li><span class="num">2</span><span><strong>Toji's Assassination</strong> — The Sorcerer Killer, invisible to sorcerers, struck down Gojo and killed Riko. Gojo's rebirth — his awakening to the true power of the Six Eyes — was born from this near-death.</span></li>
-            <li><span class="num">3</span><span><strong>Geto's Descent</strong> — Witnessing the cruelty of humans, Geto concluded that non-sorcerers were the true curse. He vowed to create a world of only sorcerers.</span></li>
-          </ul>
-        </div>
+    <div class="portal-card reveal">
+      <div>
+        <div class="tag">04 · Incident Log</div>
+        <h2>Hidden Inventory → Shibuya</h2>
+        <p>The archive's chronology, mechanics, current canon status, and unresolved threads live on their own page. Keeping the timeline separate makes the home page an index instead of a scrolling wiki dump.</p>
       </div>
-
-      <!-- SHIBUYA -->
-      <div class="arc-card reveal" style="--ac:var(--sukuna)">
-        <div class="img-wrap"><img src="assets/shibuya.png" alt="Shibuya Incident"></div>
-        <div class="body">
-          <div class="arc-tag">Arc 2 · Shibuya Incident</div>
-          <h3>The Night of the Veil</h3>
-          <p>On October 31st, the curses launched a coordinated assault on Shibuya. Massive veils trapped civilians and sorcerers inside, and the true goal was revealed: to seal the strongest sorcerer, Satoru Gojo, in the Prison Realm.</p>
-          <ul class="rule-list">
-            <li><span class="num">1</span><span><strong>The Veil Barrier</strong> — A massive barrier sealed off Shibuya, trapping thousands of civilians. Entry was restricted; only those with cursed energy could pass, and even they were funneled into traps.</span></li>
-            <li><span class="num">2</span><span><strong>The False Report</strong> — The higher-ups issued a false emergency announcement, declaring a gas leak to keep civilians from fleeing — ensuring the curses' plan proceeded undisturbed.</span></li>
-            <li><span class="num">3</span><span><strong>Gojo's Sealing</strong> — After a grueling battle, Gojo was tricked and sealed within the Prison Realm. The strongest sorcerer was removed from the board, and the world of jujutsu was thrown into chaos.</span></li>
-            <li><span class="num">4</span><span><strong>Sukuna's Rampage</strong> — Yuji was forced to release Sukuna to fight. The King of Curses unleashed Malevolent Shrine, slaughtering hundreds and leveling the city — a display of power that shook the world.</span></li>
-            <li><span class="num">5</span><span><strong>Mahito's Evolution</strong> — Mahito's battle with Yuji culminated in his growth into Instant Spirit Body of Distorted Killing, before Kenjaku ultimately absorbed him.</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- PRISON REALM + MAP -->
-    <div class="domain-explainer reveal" style="margin-top:3rem;">
-      <h3>The Prison Realm & The Veil</h3>
-      <div class="de-grid">
-        <div class="de-item">
-          <h4>Prison Realm 獄門疆</h4>
-          <p>A special-grade cursed object that can seal any being within a pocket dimension. It requires a specific condition to activate — and Gojo, exhausted and distracted, fell into its trap. Its power is absolute; even the strongest cannot escape.</p>
-        </div>
-        <div class="de-item">
-          <h4>The Shibuya Veil</h4>
-          <p>A multi-layered barrier that sealed the entire district. Its rules were simple: no one could leave, and entry was controlled. The barriers were used to isolate civilians and control movement, helping the curse users manipulate where sorcerers could enter and fight.</p>
-        </div>
-        <div class="de-item">
-          <h4>The Binding Vow</h4>
-          <p>Sukuna and Yuji made a binding vow that included Sukuna reviving Yuji for one minute when he said 'Enchain', with Yuji forgetting the agreement. The vow is more complicated than a simple 'never harm innocents' rule.</p>
-        </div>
-        <div class="de-item">
-          <h4>The 200% Hollow Purple</h4>
-          <p>Gojo's 200% Hollow Purple was used at the start of the Shinjuku Showdown, not Shibuya. It was launched as a long-range attack against Sukuna after Utahime, Gakuganji and others prepared the amplification.</p>
-        </div>
-      </div>
+      <a class="btn btn-primary" href="season2.html">Open Incident Log</a>
     </div>
   </div>
 </section>
