@@ -828,59 +828,39 @@ function drawFX(){
 }
 drawFX();
 
-/* ---------- REAL-TIME-GESREC BRIDGE ---------- */
-async function probeGestureBackend(){
-  try{
-    const r = await fetch(GESTURE_API + '/health', {signal: AbortSignal.timeout(500)});
-    if(!r.ok) throw new Error('offline');
-    gestureBackend = 'gesrec';
-    backendBadge.textContent = 'HAND ENGINE · Real-time-GesRec';
-    backendBadge.style.color = '#69f0ae';
-    return true;
-  }catch(e){
-    gestureBackend = 'browser';
-    backendBadge.textContent = 'HAND ENGINE · browser fallback';
-    backendBadge.style.color = '#8a8aa5';
-    return false;
-  }
-}
-
-async function sendGestureFrame(){
-  if(!camRunning || gestureSending || gestureBackend !== 'gesrec' || cam.readyState < 2) return;
-  gestureSending = true;
-  try{
-    const c = document.createElement('canvas'); c.width=480; c.height=270;
-    c.getContext('2d').drawImage(cam,0,0,c.width,c.height);
-    const image = c.toDataURL('image/jpeg', .68);
-    const r = await fetch(GESTURE_API + '/predict', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:image})});
-    const data = await r.json();
-    if(data.ready){
-      fingerCountEl.textContent = Math.round(data.confidence*100) + '%';
-      if(data.mapped && data.confidence >= .72){
-        const mapped = DOMAINS[data.domain_idx];
-        if(mapped && (!activeDomain || activeDomain.idx !== mapped.idx)) triggerDomain(mapped.idx);
-      }
-    } else fingerCountEl.textContent = 'warming…';
-  }catch(e){
-    gestureBackend='browser'; backendBadge.textContent='HAND ENGINE · browser fallback'; backendBadge.style.color='#8a8aa5';
-  }finally{ gestureSending=false; }
-}
-
-/* ---------- BROWSER FALLBACK ---------- */
+/* ---------- BROWSER HAND TRACKING ---------- */
 function onVideoFrame(){
   if(!camRunning || !handDetector) return;
   if(cam.currentTime === lastVideoTime){ requestAnimationFrame(onVideoFrame); return; }
   lastVideoTime = cam.currentTime;
   try{
-    const res=handDetector.detectForVideo(cam,performance.now());
-    if(res.landmarks && res.landmarks.length>0) onFingerCount(countFingers(res.landmarks[0]));
-    else { onFingerCount(-1); fingerCountEl.textContent='–'; }
-  }catch(e){}
+    const res = handDetector.detectForVideo(cam, performance.now());
+    if(res.landmarks && res.landmarks.length){
+      drawHandFeedback(res.landmarks);
+      fingerCountEl.textContent = res.landmarks.length === 1 ? '1 hand tracked' : res.landmarks.length + ' hands tracked';
+    } else {
+      fingerCountEl.textContent = 'No hand';
+    }
+  }catch(e){ console.warn('Hand tracking frame failed', e); }
   requestAnimationFrame(onVideoFrame);
 }
 
-
-  gesturePollTimer=setInterval(sendGestureFrame,140);
+function drawHandFeedback(hands){
+  fctx.save();
+  fctx.lineWidth = 3;
+  fctx.shadowBlur = 14;
+  const color = activeDomain ? activeDomain.color : '#b388ff';
+  fctx.strokeStyle = color;
+  fctx.fillStyle = color;
+  for(const hand of hands){
+    const pts = hand.map(p=>({x:p.x*fx.width,y:p.y*fx.height}));
+    const edges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+    for(const [x,y] of edges){
+      fctx.beginPath(); fctx.moveTo(pts[x].x,pts[x].y); fctx.lineTo(pts[y].x,pts[y].y); fctx.stroke();
+    }
+    for(const p of pts){ fctx.beginPath(); fctx.arc(p.x,p.y,4,0,Math.PI*2); fctx.fill(); }
+  }
+  fctx.restore();
 }
 
 /* ---------- CAMERA ---------- */
@@ -958,7 +938,8 @@ $('scStartBtn').addEventListener('click', async ()=>{
     stopCamera();
     return;
   }
-  if(!handDetector && !mpLoading) await loadHandModel();
+  if(!handDetector) await loadHandModel();
+  if(!handDetector){ showToast('Hand tracker could not load — check your connection'); return; }
   await startCamera();
 });
 
@@ -975,7 +956,7 @@ window.addEventListener('load', async ()=>{
     showToast('Camera not supported — manual casting enabled');
     return;
   }
-  loadHandModel();
+  // Load on demand from the camera button so mobile browsers can ask for permission cleanly.
 });
 </script>
 </body>
