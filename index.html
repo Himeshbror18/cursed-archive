@@ -27,7 +27,30 @@ footer{border-top:1px solid var(--line);padding:45px max(18px,5vw);color:#6f736d
 @media(max-width:900px){.system{grid-template-columns:1fr}.people{grid-template-columns:1fr 1fr}.domains{grid-template-columns:1fr}.signal-strip{grid-template-columns:1fr 1fr}.signal:nth-child(2){border-right:0;margin-right:0;padding-right:0}.signal:nth-child(3){border-right:1px solid var(--line)}.seal-row{grid-template-columns:180px 1fr}.seal-row img{width:180px;height:150px}.seal-action{display:none}}
 @media(max-width:620px){nav{height:56px}.nav-links{gap:13px}.nav-links a:nth-child(-n+2){display:none}.hero{min-height:92vh;padding-bottom:9vh}.hero h1{font-size:clamp(3.6rem,18vw,6rem)}.section{padding:75px 18px}.section-head{grid-template-columns:45px 1fr;gap:12px}.section-no{font-size:1.3rem}.people{grid-template-columns:1fr}.rule-columns{grid-template-columns:1fr}.rule:nth-child(odd){border-right:0;padding-right:0}.rule:nth-child(even){padding-left:0}.signal-strip{grid-template-columns:1fr}.signal,.signal:not(:last-child){border-right:0;border-bottom:1px solid var(--line);margin:0;padding:14px 0}.signal:last-child{border-bottom:0}.seal-row{grid-template-columns:1fr}.seal-row img{width:100%;height:205px}.incident-card{grid-template-columns:40px 1fr;padding:22px}.incident-link{grid-column:2}.scroll{display:none}.hero-actions .btn{width:100%;justify-content:center}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-</style>
+<style>
+/* ===== ART DIRECTION: ARCHIVE / PRINT / CURSED LIGHT ===== */
+:root{--paper:#e7e4db;--ink:#0b0c0e;--violet:#9d91ff;--blood:#a34d58;--gold:#c7ad72}
+body{background:radial-gradient(ellipse at 72% 12%,rgba(116,99,190,.11),transparent 34%),radial-gradient(ellipse at 8% 78%,rgba(163,77,88,.055),transparent 32%),#090a0c}
+.hero:after{content:"";position:absolute;inset:auto 0 0;height:35%;background:linear-gradient(transparent,rgba(8,9,11,.88));pointer-events:none}
+.person-card{overflow:hidden;isolation:isolate;box-shadow:0 18px 50px rgba(0,0,0,.28)}
+.person-card img{transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .5s ease}.person-card:hover img{transform:scale(1.045);filter:saturate(1.08) contrast(1.04)}
+.person-card .name,.person-card .meta,.person-card .tag{position:relative;z-index:4;text-shadow:0 2px 16px #000}
+.person-card:after{z-index:2!important}.person-card .card-content{z-index:4!important}
+.seal-study{padding:8rem 5vw;background:linear-gradient(180deg,#0b0c0e,#0e0d11 48%,#0a0b0d);position:relative}
+.seal-study:before{content:"";position:absolute;left:5vw;right:5vw;top:4rem;height:1px;background:linear-gradient(90deg,transparent,rgba(157,145,255,.5),transparent)}
+.seal-study-head{max-width:1200px;margin:0 auto 3.2rem;display:grid;grid-template-columns:1fr .7fr;gap:5rem;align-items:end}
+.seal-study-head h2{font-size:clamp(2.6rem,5vw,5rem);line-height:.93;letter-spacing:-.055em;margin:.5rem 0}.seal-study-head h2 em{font-family:Georgia,serif;font-weight:400;color:#aaa5c7}.seal-study-head p{color:#858981;line-height:1.8;font-size:.82rem;max-width:420px}
+.seal-study-grid{max-width:1200px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.09)}
+.seal-card{min-height:480px;background:#0d0e11;position:relative;display:grid;grid-template-rows:1fr auto;overflow:hidden;transition:transform .35s ease,background .35s ease}.seal-card:hover{transform:translateY(-5px);background:#111218}
+.seal-art{position:relative;display:flex;align-items:center;justify-content:center;min-height:340px;background:radial-gradient(circle at 50% 48%,color-mix(in srgb,var(--seal) 15%,transparent),transparent 54%)}
+.seal-art:before{content:"";position:absolute;width:70%;height:70%;border:1px solid color-mix(in srgb,var(--seal) 28%,transparent);border-radius:50%;box-shadow:0 0 80px color-mix(in srgb,var(--seal) 12%,transparent)}
+.seal-art img{position:relative;width:72%;height:72%;object-fit:contain;filter:drop-shadow(0 16px 25px rgba(0,0,0,.55));transition:transform .5s ease}.seal-card:hover .seal-art img{transform:scale(1.055)}
+.seal-axis{position:absolute;right:18px;top:18px;font:600 .52rem/1 monospace;letter-spacing:1.6px;color:color-mix(in srgb,var(--seal) 70%,#aaa);writing-mode:vertical-rl}
+.seal-copy{padding:1.6rem 1.8rem 1.8rem;border-top:1px solid rgba(255,255,255,.08)}.seal-copy>span{font:600 .55rem/1 monospace;letter-spacing:1.8px;color:var(--seal)}.seal-copy h3{font-size:1.7rem;margin:.45rem 0}.seal-copy p{margin:0;color:#858981;font-size:.76rem;line-height:1.7;max-width:500px}
+.seal-gojo{--seal:#a99cff}.seal-sukuna{--seal:#b65a68}.seal-megumi{--seal:#7f88cf}.seal-mahito{--seal:#6fa5a2}
+.kofi-feature{display:flex;align-items:center;gap:13px;padding:14px 18px;border:1px solid rgba(199,173,114,.34);background:linear-gradient(135deg,rgba(199,173,114,.09),rgba(157,145,255,.045));color:#e9e4d7;min-width:245px;box-shadow:0 10px 35px rgba(0,0,0,.22);transition:transform .25s,border-color .25s}.kofi-feature:hover{transform:translateY(-3px);border-color:rgba(199,173,114,.72)}.kofi-icon{font-size:1.35rem}.kofi-feature b{display:block;font-size:.82rem}.kofi-feature small{display:block;margin-top:3px;color:#7f827b;font-size:.58rem;letter-spacing:.4px}.kofi-arrow{margin-left:auto;color:#c7ad72;font-size:1rem}.maintained{font-size:.68rem!important;letter-spacing:1.7px!important;margin-top:11px!important;color:#8d9189!important}.maintained-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#9d91ff;box-shadow:0 0 10px #9d91ff;margin-right:8px;vertical-align:1px}
+@media(max-width:760px){.seal-study-head{grid-template-columns:1fr;gap:1rem}.seal-study{padding:6rem 1.2rem}.seal-study-grid{grid-template-columns:1fr}.seal-card{min-height:430px}.seal-art{min-height:290px}.kofi-feature{min-width:0;width:100%}}
+</style></head>
 </head>
 <body>
 <div id="grain"></div><canvas id="energy"></canvas>
@@ -66,11 +89,18 @@ footer{border-top:1px solid var(--line);padding:45px max(18px,5vw);color:#6f736d
 </div></div></section>
 <section class="section incident" id="season2"><div class="inner"><div class="section-head reveal"><div class="section-no">04</div><div><div class="tag">Season 2 · Incident Log</div><h2>The fracture point</h2><p>Hidden Inventory, Shibuya, the seven-rule primer, and the current canon status are now one clearly marked destination.</p></div></div><a class="incident-card reveal" href="season2.html"><div class="incident-no">04</div><div><h3>Season 2 · Rules &amp; Story</h3><p>Gojo and Geto's past → Shibuya → the Prison Realm → aftermath → where the wider JJK story stands now.</p><div class="incident-meta"><span class="chip">7 rules explained</span><span class="chip">Season 2 chronology</span><span class="chip">Current canon</span><span class="chip">Cliffhanger / aftermath</span></div></div><div class="incident-link">Open file ↗</div></a></div></section>
 </main>
-<footer><div class="footer-inner">
-  <div class="footer-brand"><div class="footer-mark">呪術廻戦 · CURSED ARCHIVE</div><div class="maintained">Maintained by <strong>HIMESH BROR</strong></div></div>
-  <div class="footer-support"><span>Enjoyed the archive?</span><a class="kofi" href="https://ko-fi.com/himanshu18" target="_blank" rel="noopener">☕ Support on Ko-fi</a></div>
+<footer>
+<div class="footer-inner">
+  <div class="footer-brand">
+    <div class="footer-mark">呪術廻戦 · CURSED ARCHIVE</div>
+    <div class="maintained"><span class="maintained-dot"></span>Maintained by <strong>HIMESH BROR</strong></div>
+  </div>
+  <a class="kofi-feature" href="https://ko-fi.com/himanshu18" target="_blank" rel="noopener">
+    <span class="kofi-icon">☕</span><span><b>Buy me a coffee</b><small>Support the archive · optional</small></span><span class="kofi-arrow">↗</span>
+  </a>
   <div class="footer-legal">Fan-made archive. Jujutsu Kaisen © Gege Akutami / Shueisha and respective rights holders. Not affiliated with the official franchise.</div>
-</div></footer>
+</div>
+</footer>
 <script>
 const canvas=document.getElementById('energy'),ctx=canvas.getContext('2d');let W=0,H=0;const pts=[];function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}addEventListener('resize',resize);resize();for(let i=0;i<72;i++)pts.push({x:Math.random()*W,y:Math.random()*H,r:.45+Math.random()*1.5,v:.1+Math.random()*.32,a:.06+Math.random()*.22,phase:Math.random()*6.28});function tick(){ctx.clearRect(0,0,W,H);for(const p of pts){p.y-=p.v;p.x+=Math.sin(p.y*.006+p.phase)*.08;if(p.y<0)p.y=H;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(169,156,255,${p.a})`;ctx.fill()}requestAnimationFrame(tick)}tick();
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
