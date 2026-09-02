@@ -399,7 +399,7 @@
   .stage-sec{background:linear-gradient(180deg,#08080d,#05050a);padding-top:3rem}
   .stage-wrap{max-width:1100px}
   .stage-frame{border-radius:12px;border-color:rgba(255,255,255,.1);box-shadow:0 30px 90px rgba(0,0,0,.55)}
-  .stage-frame::after{content:'HAND TRACKING · CAMERA';background:rgba(4,4,8,.8);border-color:rgba(255,255,255,.1);color:#b9b8c2}
+  #handFx{position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none;}\n  .stage-frame::after{content:'HAND TRACKING · CAMERA';background:rgba(4,4,8,.8);border-color:rgba(255,255,255,.1);color:#b9b8c2}
   .info-bar{border-radius:9px;background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.08);padding:.85rem 1rem}
   .domain-display{border-radius:12px;background:rgba(12,12,18,.82);border-color:rgba(255,255,255,.08);box-shadow:none}
   .domain-display.active{box-shadow:0 18px 55px rgba(0,0,0,.4)}
@@ -456,6 +456,7 @@
     <div class="stage-frame" id="stageFrame">
       <video id="cam" autoplay playsinline muted></video>
       <canvas id="fx" width="1280" height="720"></canvas>
+      <canvas id="handFx" width="1280" height="720" aria-hidden="true"></canvas>
 
       <!-- domain overlay layers -->
       <div class="domain-overlay" id="overlay">
@@ -602,7 +603,7 @@ let audioCtx = null;
 
 /* ---------- DOM REFS ---------- */
 const $ = id => document.getElementById(id);
-const cam = $('cam'), fx = $('fx'), fctx = fx.getContext('2d');
+const cam = $('cam'), fx = $('fx'), fctx = fx.getContext('2d'), handFx = $('handFx'), hctx = handFx.getContext('2d');
 const stageFrame = $('stageFrame'), overlay = $('overlay');
 const overlayKanji = $('overlayKanji'), actFlash = $('actFlash'), actRing = $('actRing');
 const domainDisplay = $('domainDisplay'), ddInner = $('ddInner'), ddPlaceholder = $('ddPlaceholder');
@@ -739,39 +740,6 @@ function triggerDomain(idx, manual = false){
   triggerCharacterFX(d);
 }
 
-/* ---------- HAND TRACKING FEEDBACK ---------- */
-function onVideoFrame(){
-  if(!camRunning || !handDetector) return;
-  if(cam.currentTime === lastVideoTime){ requestAnimationFrame(onVideoFrame); return; }
-  lastVideoTime = cam.currentTime;
-  try{
-    const res = handDetector.detectForVideo(cam, performance.now());
-    if(res.landmarks && res.landmarks.length){
-      drawHandFeedback(res.landmarks);
-      fingerCountEl.textContent = res.landmarks.length === 1 ? '1 hand tracked' : res.landmarks.length + ' hands tracked';
-    }else{
-      fingerCountEl.textContent = 'No hand';
-    }
-  }catch(e){}
-  requestAnimationFrame(onVideoFrame);
-}
-
-function drawHandFeedback(hands){
-  fctx.save();
-  fctx.lineWidth = 3;
-  fctx.shadowBlur = 14;
-  const color = activeDomain ? activeDomain.color : '#b388ff';
-  fctx.strokeStyle = color;
-  fctx.fillStyle = color;
-  for(const hand of hands){
-    const pts = hand.map(p=>({x:p.x*fx.width,y:p.y*fx.height}));
-    const edges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
-    for(const [a,b] of edges){ fctx.beginPath(); fctx.moveTo(pts[a].x,pts[a].y); fctx.lineTo(pts[b].x,pts[b].y); fctx.stroke(); }
-    for(const p of pts){ fctx.beginPath(); fctx.arc(p.x,p.y,4,0,Math.PI*2); fctx.fill(); }
-  }
-  fctx.restore();
-}
-
 /* ---------- FX PARTICLE ENGINE ---------- */
 const particles = [];
 const N_PARTICLES = 120;
@@ -873,32 +841,35 @@ function onVideoFrame(){
   lastVideoTime = cam.currentTime;
   try{
     const res = handDetector.detectForVideo(cam, performance.now());
+    hctx.clearRect(0,0,handFx.width,handFx.height);
     if(res.landmarks && res.landmarks.length){
       drawHandFeedback(res.landmarks);
       fingerCountEl.textContent = res.landmarks.length === 1 ? '1 hand tracked' : res.landmarks.length + ' hands tracked';
-    } else {
+    }else{
       fingerCountEl.textContent = 'No hand';
     }
-  }catch(e){ console.warn('Hand tracking frame failed', e); }
+  }catch(e){
+    console.warn('Hand tracking frame failed', e);
+  }
   requestAnimationFrame(onVideoFrame);
 }
 
 function drawHandFeedback(hands){
-  fctx.save();
-  fctx.lineWidth = 3;
-  fctx.shadowBlur = 14;
+  hctx.save();
+  hctx.lineWidth = 3;
+  hctx.shadowBlur = 14;
   const color = activeDomain ? activeDomain.color : '#b388ff';
-  fctx.strokeStyle = color;
-  fctx.fillStyle = color;
+  hctx.strokeStyle = color;
+  hctx.fillStyle = color;
   for(const hand of hands){
-    const pts = hand.map(p=>({x:p.x*fx.width,y:p.y*fx.height}));
+    const pts = hand.map(p=>({x:p.x*handFx.width,y:p.y*handFx.height}));
     const edges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
-    for(const [x,y] of edges){
-      fctx.beginPath(); fctx.moveTo(pts[x].x,pts[x].y); fctx.lineTo(pts[y].x,pts[y].y); fctx.stroke();
+    for(const [a,b] of edges){
+      hctx.beginPath(); hctx.moveTo(pts[a].x,pts[a].y); hctx.lineTo(pts[b].x,pts[b].y); hctx.stroke();
     }
-    for(const p of pts){ fctx.beginPath(); fctx.arc(p.x,p.y,4,0,Math.PI*2); fctx.fill(); }
+    for(const p of pts){ hctx.beginPath(); hctx.arc(p.x,p.y,4,0,Math.PI*2); hctx.fill(); }
   }
-  fctx.restore();
+  hctx.restore();
 }
 
 /* ---------- CAMERA ---------- */
