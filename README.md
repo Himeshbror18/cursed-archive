@@ -221,6 +221,23 @@ The website is structurally healthy for a static project:
 
 **Camera interaction:** Finger-count detection is inherently probabilistic. It should be treated as an input convenience, not a guaranteed control mechanism.
 
+## Hand-sign recognition
+
+The Domain Expansion simulator supports an optional local **Real-time-GesRec** recognition backend. It uses the temporal gesture-recognition approach from ahmetgunduz/Real-time-GesRec, while keeping the browser landmark detector as a fallback. The upstream project is a PyTorch implementation for real-time hand-gesture detection/classification using temporal video clips. citeturn1search0
+
+Because the upstream pretrained classes are **not Jujutsu Kaisen hand seals**, Cursed Archive does not pretend that an off-the-shelf checkpoint recognizes them. The included bridge expects a custom six-class checkpoint trained/fine-tuned for the project's seals. See `gesture_bridge/README.md`.
+
+### Credit
+
+Cursed Archive uses an integration layer inspired by and built to work with:
+
+- **Ahmet Gunduz — Real-time-GesRec**
+- Okan Köpüklü
+- Neslihan Kose
+- Gerhard Rigoll
+
+Please retain the upstream project's license and academic citation requirements when using its source code or pretrained models. The original project documents the associated research and pretrained models. citeturn1search0
+
 ## Recommended next improvements
 
 In priority order:
