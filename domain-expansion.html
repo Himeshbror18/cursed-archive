@@ -612,22 +612,21 @@ const fingerCountEl = $('fingerCount'), domainNameEl = $('domainName');
 const toast = $('toast');
 
 /* ---------- BUILD GUIDE CARDS ---------- */
-const fingersEmoji = ['∞','影','魔','円'];
-const fingersLabel = ['Gojo seal','Megumi seal','Sukuna seal','Mahito seal'];
+const sealLabels = ['Gojo · Unlimited Void seal','Megumi · Chimera Shadow Garden seal','Sukuna · Malevolent Shrine seal','Mahito · Self-Embodiment seal'];
 const guideGrid = $('guideGrid');
 DOMAINS.forEach((d,i)=>{
   const card = document.createElement('div');
   card.className = 'guide-card';
   card.style.setProperty('--dc', d.color);
   card.innerHTML = `
-    <div class="gc-hand">${fingersEmoji[i]}</div>
-    <div class="gc-count">${fingersLabel[i]}</div>
+    <div class="gc-hand"><img src="assets/domain_hands.png" alt="${sealLabels[i]} reference"></div>
+    <div class="gc-count">${sealLabels[i]}</div>
     <h3>${d.name}</h3>
     <div class="gc-kanji">${d.kanji}</div>
     <p>${d.desc}</p>
     <div class="gc-sign">Practice <span>${d.seal}</span> → then cast manually</div>
   `;
-  card.addEventListener('click', ()=> triggerDomain(i, true));
+  card.addEventListener('click', ()=> { triggerDomain(i, true); document.querySelector('#simulator').scrollIntoView({behavior:'smooth',block:'start'}); });
   guideGrid.appendChild(card);
 });
 
