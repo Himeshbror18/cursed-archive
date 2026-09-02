@@ -329,101 +329,27 @@
   .sec-head h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:2px;}
   .sec-head p{color:var(--muted);max-width:640px;margin:0.8rem auto 0;font-size:0.95rem;}
   .guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;}
-  .guide-card{
-    position:relative;border-radius:16px;overflow:hidden;
-    background:linear-gradient(170deg,rgba(20,20,36,0.97),rgba(8,8,16,0.97));
-    border:1px solid rgba(255,255,255,0.08);padding:1.6rem;
-    transition:transform .4s,box-shadow .4s,border-color .4s;
-    cursor:pointer;
-  }
-  .guide-card:hover{transform:translateY(-6px);border-color:var(--dc,rgba(179,136,255,0.4));box-shadow:0 15px 40px rgba(0,0,0,0.6);}
-  .guide-card .gc-hand{
-    width:70px;height:70px;border-radius:12px;margin-bottom:1rem;
-    border:1px solid rgba(255,255,255,0.12);
-    background:
-      radial-gradient(circle at 50% 50%, var(--dc,rgba(255,255,255,0.15)), transparent 65%),
-      rgba(255,255,255,0.03);
-    display:flex;align-items:center;justify-content:center;
-    font-size:1.9rem;font-weight:900;color:var(--dc,var(--sukuna));
-    position:relative;overflow:hidden;
-  }
-  .guide-card .gc-hand::after{
-    content:'';position:absolute;inset:0;border-radius:12px;
-    box-shadow:inset 0 0 18px var(--dc,rgba(179,136,255,0.35));
-    animation:handGlow 3s ease-in-out infinite;
-  }
-  @keyframes handGlow{0%,100%{opacity:0.3}50%{opacity:0.8}}
-  .guide-card .gc-count{
-    font-size:0.7rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:0.3rem;
-  }
-  .guide-card h3{font-size:1.2rem;margin-bottom:0.2rem;color:var(--ink);}
-  .guide-card .gc-kanji{font-size:0.85rem;color:var(--dc,var(--sukuna));letter-spacing:2px;margin-bottom:0.7rem;font-family:'Noto Serif JP',serif;}
-  .guide-card p{color:var(--muted);font-size:0.85rem;}
-  .guide-card .gc-sign{font-size:0.78rem;margin-top:0.8rem;padding-top:0.7rem;border-top:1px solid rgba(255,255,255,0.07);color:var(--ink);font-weight:700;}
-  .guide-card .gc-sign span{color:var(--dc,var(--sukuna));}
+  
 
-  /* ============ FOOTER ============ */
-  footer{
-    position:relative;z-index:1;text-align:center;padding:3rem 2rem;
-    border-top:1px solid rgba(179,136,255,0.1);color:var(--muted);font-size:0.85rem;
-  }
-  footer .logo{
-    font-weight:800;letter-spacing:2px;margin-bottom:0.5rem;
-    background:linear-gradient(90deg,var(--gojo),var(--sukuna));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-
-  /* toast */
-  #toast{
-    position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
-    background:rgba(10,10,22,0.95);border:1px solid var(--dc,rgba(179,136,255,0.4));
-    color:var(--ink);padding:0.9rem 1.6rem;border-radius:50px;
-    font-size:0.9rem;font-weight:700;letter-spacing:1px;z-index:300;
-    transition:transform .4s ease;box-shadow:0 10px 30px rgba(0,0,0,0.6);
-    font-family:'Noto Serif JP','Segoe UI',sans-serif;
-  }
-  #toast.show{transform:translateX(-50%) translateY(0);}
-
-  /* ===== DOMAIN LAB EDITORIAL PASS ===== */
-  nav{background:rgba(5,5,8,.88);border-bottom:1px solid rgba(255,255,255,.07)}
-  nav .logo{background:linear-gradient(90deg,#f0f0f3,#aaa4ff);-webkit-background-clip:text;background-clip:text}
-  nav .links a{font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px}
-  nav .links a.back{border-radius:7px;padding:.4rem .85rem}
-  .hero{min-height:72vh;align-items:flex-start;text-align:left;justify-content:flex-end;padding:7rem max(1.5rem,7vw) 6rem;background:radial-gradient(circle at 75% 45%,rgba(139,128,255,.13),transparent 35%)}
-  .hero .kicker{font-size:.66rem;letter-spacing:3px;color:#a7a1ff}
-  .hero h1{font-size:clamp(3rem,8vw,6.5rem);letter-spacing:-1px;background:linear-gradient(115deg,#f4f4f6,#c9c5ff 50%,#8177ff);-webkit-background-clip:text;background-clip:text}
-  .hero .sub{max-width:650px;font-size:.94rem;color:#a5a5b2}
-  .hero .cta{justify-content:flex-start}
-  .btn{border-radius:7px}.btn-primary{background:#ededf1;box-shadow:0 10px 35px rgba(0,0,0,.4)}.btn-primary:hover{background:#fff;box-shadow:0 15px 45px rgba(0,0,0,.55)}
-  .btn-ghost{border-color:rgba(255,255,255,.14);color:#d5d4df}.btn-ghost:hover{background:rgba(255,255,255,.06)}
-  .stage-sec{background:linear-gradient(180deg,#08080d,#05050a);padding-top:3rem}
-  .stage-wrap{max-width:1100px}
-  .stage-frame{border-radius:12px;border-color:rgba(255,255,255,.1);box-shadow:0 30px 90px rgba(0,0,0,.55)}
-  #handFx{position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none;}\n  .stage-frame::after{content:'HAND TRACKING · CAMERA';background:rgba(4,4,8,.8);border-color:rgba(255,255,255,.1);color:#b9b8c2}
-  .info-bar{border-radius:9px;background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.08);padding:.85rem 1rem}
-  .domain-display{border-radius:12px;background:rgba(12,12,18,.82);border-color:rgba(255,255,255,.08);box-shadow:none}
-  .domain-display.active{box-shadow:0 18px 55px rgba(0,0,0,.4)}
-  .dd-char{border-radius:9px}
-  .manual-row{justify-content:flex-start}
-  .manual-row .mbtn{border-radius:7px;background:rgba(255,255,255,.025);font-size:.76rem;letter-spacing:.5px}
-  .practice-note{max-width:none;text-align:left;border-radius:9px;background:rgba(255,255,255,.02)}
-  .guide-sec{background:#08080d;padding:6rem 1.5rem}
-  .guide-wrap{max-width:1100px}
-  .sec-head{text-align:left;border-left:2px solid #8f86ff;padding-left:1rem;margin-bottom:2.5rem}
-  .sec-head .tag{font-size:.66rem;letter-spacing:3px;color:#9b93ff}
-  .sec-head h2{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.5px}
-  .sec-head p{margin:.7rem 0 0;max-width:700px}
-  .guide-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-  .guide-card{border-radius:10px;background:rgba(14,14,20,.8);border-color:rgba(255,255,255,.07);padding:1.35rem}
-  .guide-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
-  .guide-card .gc-hand{width:100%;height:160px;border-radius:8px;margin-bottom:1rem;background:linear-gradient(135deg,rgba(255,255,255,.03),rgba(139,128,255,.05));font-size:0}
-  .guide-card .gc-hand img{width:100%;height:100%;object-fit:cover;filter:grayscale(.15) contrast(1.08);opacity:.9}
-  .guide-card .gc-hand::after{box-shadow:inset 0 0 30px var(--dc,rgba(179,136,255,.25));}
-  .guide-card .gc-count{font-size:.62rem;letter-spacing:1.8px}
-  .guide-card h3{font-size:1.1rem}.guide-card .gc-kanji{font-size:.8rem}.guide-card p{font-size:.82rem;line-height:1.7}.guide-card .gc-sign{font-size:.74rem}
-  footer{background:#050507;border-top-color:rgba(255,255,255,.07)}
-  @media(max-width:700px){.hero{min-height:78vh}.guide-grid{grid-template-columns:1fr}.manual-row{justify-content:center}}
-</style>
+  /* ===== SEAL REFERENCE REDESIGN ===== */
+  .guide-sec{background:#08090b!important;padding:7rem 1.5rem}
+  .guide-wrap{max-width:1180px;margin:auto}
+  .guide-sec .sec-head{border-left:1px solid #b9a7ff;padding-left:1rem;text-align:left}
+  .seal-list{border-top:1px solid rgba(236,236,231,.11)}
+  .seal-item{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:0;margin:0;border-bottom:1px solid rgba(236,236,231,.11);background:transparent}
+  .seal-item:nth-child(even){grid-template-columns:minmax(280px,.75fr) minmax(0,1.25fr)}
+  .seal-item:nth-child(even) .seal-image{order:2}
+  .seal-item:nth-child(even) figcaption{order:1}
+  .seal-image{min-height:320px;background:#111214;overflow:hidden}
+  .seal-image img{width:100%;height:100%;min-height:320px;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05);transition:transform .6s ease,filter .6s ease}
+  .seal-item:hover .seal-image img{transform:scale(1.025);filter:grayscale(.55) contrast(1.08)}
+  .seal-item figcaption{display:flex;flex-direction:column;justify-content:center;padding:2.5rem}
+  .seal-item figcaption>span{font-size:.62rem;letter-spacing:2.5px;color:#b9a7ff}
+  .seal-item h3{font-size:clamp(1.7rem,3vw,2.6rem);letter-spacing:-.03em;margin:.35rem 0 .65rem}
+  .seal-item p{color:#92958f;font-size:.88rem;line-height:1.8;max-width:480px}
+  .seal-item a{margin-top:1.2rem;color:#d7cfff;font-size:.68rem;letter-spacing:1.4px;text-transform:uppercase}
+  @media(max-width:720px){.seal-item,.seal-item:nth-child(even){display:block}.seal-item:nth-child(even) .seal-image,.seal-item:nth-child(even) figcaption{order:initial}.seal-image,.seal-image img{min-height:230px}.seal-item figcaption{padding:1.6rem 0 2rem}}
+  </style>
 </head>
 <body>
 
@@ -432,7 +358,7 @@
   <a class="logo" href="index.html">呪術廻戦 · DOMAIN LAB</a>
   <div class="links">
     <a href="#simulator">Simulator</a>
-    <a href="#guide">Hand Signs</a>
+    <a href="#guide">Seal References</a><a href="season2.html">Incident Log</a>
     <a class="back" href="index.html">← Archive</a>
   </div>
 </nav>
@@ -506,8 +432,8 @@
       </div>
       <div class="dd-placeholder" id="ddPlaceholder">
         <div class="big">領域展開</div>
-        <h3>Awaiting Your Hand Seal</h3>
-        <p>Activate the camera, then form a hand sign in front of it.<br>Hold the seal to manifest the domain.</p>
+        <h3>Select a Domain</h3>
+        <p>Choose a Domain below, then activate the camera if you want a live practice overlay.</p>
         <div class="hint">Select a Domain · reference its seal · practice with camera</div>
       </div>
     </div>
@@ -524,21 +450,35 @@
   </div>
 </section>
 
-<!-- HAND SIGN GUIDE -->
+<!-- CANONICAL SEAL REFERENCES -->
 <section class="guide-sec" id="guide">
   <div class="guide-wrap">
     <div class="sec-head">
-      <div class="tag">The Seals</div>
-      <h2>Domain Seal Reference</h2>
-      <p>The references below use the documented Domain seals as shown in the manga/anime. The camera is a visual practice aid, not a canon-seal classifier. If a future model is trained specifically on these seals, it can be added without changing the archive structure.</p>
+      <div class="tag">REFERENCE · MANGA PANELS</div>
+      <h2>Canonical domain seals</h2>
+      <p>No emoji. No generic “hand icon”. No Shibuya crowd shot pretending to be a hand-sign reference. These panels show the actual activation gestures; source pages are linked beneath each image.</p>
     </div>
-    <div class="guide-grid" id="guideGrid">
-      <!-- cards injected by JS -->
+    <div class="seal-list">
+      <figure class="seal-item">
+        <div class="seal-image"><img src="https://i.pinimg.com/originals/98/57/b9/9857b992fc3a31a6a43eaa38eaabb06a.jpg" alt="Gojo forming the Unlimited Void hand seal in the manga"></div>
+        <figcaption><span>01 · GOJO</span><h3>Unlimited Void</h3><p>One-handed seal. The crossed-finger gesture is the activation reference used for Unlimited Void.</p><a href="https://jujutsu-kaisen.fandom.com/wiki/Unlimited_Void" target="_blank" rel="noopener">Source / canon notes ↗</a></figcaption>
+      </figure>
+      <figure class="seal-item">
+        <div class="seal-image"><img src="https://cdn.shopify.com/s/files/1/0561/3086/3278/files/Domain-Expansion-Malevolent-Shrine-e1603952417619-667x1024_1.jpg?v=1635533517" alt="Sukuna forming the Malevolent Shrine hand seal in a manga panel"></div>
+        <figcaption><span>02 · SUKUNA</span><h3>Malevolent Shrine</h3><p>Two-handed Enmaten seal. The shrine panel is shown here specifically for the gesture, not as a generic Domain screenshot.</p><a href="https://jujutsu-kaisen.fandom.com/wiki/Malevolent_Shrine" target="_blank" rel="noopener">Source / canon notes ↗</a></figcaption>
+      </figure>
+      <figure class="seal-item">
+        <div class="seal-image"><img src="https://cdn.ourplay.net/xspace/news/1719456413711017.jpg" alt="Megumi forming the Chimera Shadow Garden hand seal"></div>
+        <figcaption><span>03 · MEGUMI</span><h3>Chimera Shadow Garden</h3><p>Distinctive interlocked seal. Megumi's Domain remains incomplete in canon, which is more important than pretending the gesture measures strength.</p><a href="https://jujutsu-kaisen.fandom.com/wiki/Chimera_Shadow_Garden" target="_blank" rel="noopener">Source / canon notes ↗</a></figcaption>
+      </figure>
+      <figure class="seal-item">
+        <div class="seal-image"><img src="https://introduction1.com/wp-content/uploads/2022/10/image-26-768x474.png" alt="Mahito forming the Self-Embodiment of Perfection hand seal"></div>
+        <figcaption><span>04 · MAHITO</span><h3>Self-Embodiment of Perfection</h3><p>A distinctive seal associated with Mahito's Domain activation. The image is a manga-panel reference rather than a decorative character shot.</p><a href="https://introduction1.com/2022/10/27/jiheienndonnka_shoin/" target="_blank" rel="noopener">Source / analysis ↗</a></figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="logo">呪術廻戦 · DOMAIN LAB</div>
   <p>A fan-made simulator. All characters, images, and lore belong to Gege Akutami and their respective owners.</p>
@@ -585,7 +525,7 @@ const DOMAINS = [
     color: '#cfd8dc',
     desc: 'Mahito’s Domain amplifies Idle Transfiguration so the technique can affect souls within the Domain without his normal need for physical contact.',
     img: 'assets/mahito.png', accent: '#cfd8dc', char: 'MAHITO',
-    seal: 'Distinctive hand seal formed with Mahito’s mouth'
+    seal: 'Distinctive hand seal'
   }
 ];
 
