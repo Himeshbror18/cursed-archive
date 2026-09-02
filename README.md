@@ -29,16 +29,15 @@ A separate interactive page that turns the Domain Expansion concept into an actu
 
 It includes:
 
-- Domain selection and activation
+- Four documented Domain Expansion profiles: Gojo, Megumi, Sukuna and Mahito
 - Character/domain display changes
-- Domain-specific colors and visual filters
-- Full-screen activation flashes and rings
-- Kanji overlays
-- Particle effects
+- Domain-specific visual filters and cursed-energy effects
+- Full-screen activation flashes, rings and particle bursts
 - Web Audio-generated activation sounds
-- Finger-count input for domain selection
-- Camera/hand-tracking interaction where supported
-- A manual interaction path so the experience is not completely dependent on a webcam
+- Browser-native hand tracking with MediaPipe
+- Live hand-landmark overlay while you practice a seal
+- Manual domain casting as a reliable fallback
+- Responsive UI for desktop and mobile
 
 The simulator is intentionally client-side. The browser does the work; there is no backend quietly judging your cursed energy output.
 
@@ -221,22 +220,19 @@ The website is structurally healthy for a static project:
 
 **Camera interaction:** Finger-count detection is inherently probabilistic. It should be treated as an input convenience, not a guaranteed control mechanism.
 
-## Hand-sign recognition
+## Hand-sign recognition: what the website actually does
 
-The Domain Expansion simulator supports an optional local **Real-time-GesRec** recognition backend. It uses the temporal gesture-recognition approach from ahmetgunduz/Real-time-GesRec, while keeping the browser landmark detector as a fallback. The upstream project is a PyTorch implementation for real-time hand-gesture detection/classification using temporal video clips. citeturn1search0
+The live website uses **MediaPipe Hand Landmarker in the browser**. It tracks the hand skeleton locally and renders the landmarks as cursed-energy feedback. It deliberately does **not** claim that simple finger counting can identify the canonical Jujutsu Kaisen seals. That would be a very confident way to be very wrong.
 
-Because the upstream pretrained classes are **not Jujutsu Kaisen hand seals**, Cursed Archive does not pretend that an off-the-shelf checkpoint recognizes them. The included bridge expects a custom six-class checkpoint trained/fine-tuned for the project's seals. See `gesture_bridge/README.md`.
+The camera therefore works as a **seal-practice mirror**: choose a Domain, study its reference, form the seal, and watch the tracked hand respond. Domain activation remains available through the manual buttons so the experience does not depend on an unreliable webcam classifier.
 
-### Credit
+### Real-time-GesRec credit
 
-Cursed Archive uses an integration layer inspired by and built to work with:
+During development, **[Real-time-GesRec](https://github.com/ahmetgunduz/Real-time-GesRec)** was evaluated as a possible temporal gesture-recognition backend. It is a PyTorch research implementation for real-time hand-gesture detection/classification using video clips, with training and pretrained models for datasets including EgoGesture and nvGesture. citeturn0search0
 
-- **Ahmet Gunduz — Real-time-GesRec**
-- Okan Köpüklü
-- Neslihan Kose
-- Gerhard Rigoll
+It is **not shipped with the deployed website** because its PyTorch runtime and pretrained checkpoints are not a suitable Vercel/browser dependency, and its pretrained classes are not Jujutsu Kaisen hand seals. Keeping non-deployable code out of this repository is intentional.
 
-Please retain the upstream project's license and academic citation requirements when using its source code or pretrained models. The original project documents the associated research and pretrained models. citeturn1search0
+Credit: **Okan Köpüklü, Ahmet Gunduz, Neslihan Kose and Gerhard Rigoll**, *Real-time Hand Gesture Detection and Classification Using Convolutional Neural Networks* (2019) and related work. citeturn0search0
 
 ## Recommended next improvements
 
@@ -246,10 +242,16 @@ In priority order:
 2. Add a **low-power/mobile FX mode** with fewer canvas particles.
 3. Improve keyboard navigation and visible focus states.
 4. Add a loading strategy for large images.
-5. Give the Domain Expansion simulator a clearer manual control panel.
-6. Add a small on-screen camera status/error message when hand tracking cannot initialize.
-7. Consolidate duplicate/older HTML pages once the preferred page is confirmed.
-8. Add a simple automated HTML/link check to catch broken local asset paths.
+5. Add canonical hand-sign reference images with clear provenance.
+6. Add a true custom gesture classifier only if a suitable browser-deployable model is trained for these specific seals.
+7. Add a small automated HTML/link check to catch broken local asset paths.
+8. Add lightweight performance and reduced-motion modes for low-end phones.
+
+## Fact-checking & sources
+
+The lore pages were reviewed against reference material for Domain Expansion mechanics and individual Domains. In particular, the project now distinguishes completed lethal Domains from incomplete Domains and correctly identifies Sukuna's open-barrier construction. citeturn0search2turn0search6
+
+The Season 2 section was also corrected to remove the misplaced **200% Hollow Purple** claim; that attack belongs to the later Shinjuku Showdown, not the Shibuya Incident.
 
 ## Credits
 
