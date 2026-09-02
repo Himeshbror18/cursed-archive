@@ -619,7 +619,7 @@ DOMAINS.forEach((d,i)=>{
   card.className = 'guide-card';
   card.style.setProperty('--dc', d.color);
   card.innerHTML = `
-    <div class="gc-hand"><img src="assets/domain_hands.png" alt="${sealLabels[i]} reference"></div>
+    <div class="gc-hand"><span>${d.kanji}</span></div>
     <div class="gc-count">${sealLabels[i]}</div>
     <h3>${d.name}</h3>
     <div class="gc-kanji">${d.kanji}</div>
