@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>領域展開 DOMAIN EXPANSION SIMULATOR — Jujutsu Kaisen</title>
+<title>領域展開 DOMAIN LAB — Jujutsu Kaisen</title>
 <style>
   /* ============ ROOT ============ */
   :root{
@@ -383,6 +383,46 @@
     font-family:'Noto Serif JP','Segoe UI',sans-serif;
   }
   #toast.show{transform:translateX(-50%) translateY(0);}
+
+  /* ===== DOMAIN LAB EDITORIAL PASS ===== */
+  nav{background:rgba(5,5,8,.88);border-bottom:1px solid rgba(255,255,255,.07)}
+  nav .logo{background:linear-gradient(90deg,#f0f0f3,#aaa4ff);-webkit-background-clip:text;background-clip:text}
+  nav .links a{font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px}
+  nav .links a.back{border-radius:7px;padding:.4rem .85rem}
+  .hero{min-height:72vh;align-items:flex-start;text-align:left;justify-content:flex-end;padding:7rem max(1.5rem,7vw) 6rem;background:radial-gradient(circle at 75% 45%,rgba(139,128,255,.13),transparent 35%)}
+  .hero .kicker{font-size:.66rem;letter-spacing:3px;color:#a7a1ff}
+  .hero h1{font-size:clamp(3rem,8vw,6.5rem);letter-spacing:-1px;background:linear-gradient(115deg,#f4f4f6,#c9c5ff 50%,#8177ff);-webkit-background-clip:text;background-clip:text}
+  .hero .sub{max-width:650px;font-size:.94rem;color:#a5a5b2}
+  .hero .cta{justify-content:flex-start}
+  .btn{border-radius:7px}.btn-primary{background:#ededf1;box-shadow:0 10px 35px rgba(0,0,0,.4)}.btn-primary:hover{background:#fff;box-shadow:0 15px 45px rgba(0,0,0,.55)}
+  .btn-ghost{border-color:rgba(255,255,255,.14);color:#d5d4df}.btn-ghost:hover{background:rgba(255,255,255,.06)}
+  .stage-sec{background:linear-gradient(180deg,#08080d,#05050a);padding-top:3rem}
+  .stage-wrap{max-width:1100px}
+  .stage-frame{border-radius:12px;border-color:rgba(255,255,255,.1);box-shadow:0 30px 90px rgba(0,0,0,.55)}
+  .stage-frame::after{content:'HAND TRACKING · CAMERA';background:rgba(4,4,8,.8);border-color:rgba(255,255,255,.1);color:#b9b8c2}
+  .info-bar{border-radius:9px;background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.08);padding:.85rem 1rem}
+  .domain-display{border-radius:12px;background:rgba(12,12,18,.82);border-color:rgba(255,255,255,.08);box-shadow:none}
+  .domain-display.active{box-shadow:0 18px 55px rgba(0,0,0,.4)}
+  .dd-char{border-radius:9px}
+  .manual-row{justify-content:flex-start}
+  .manual-row .mbtn{border-radius:7px;background:rgba(255,255,255,.025);font-size:.76rem;letter-spacing:.5px}
+  .practice-note{max-width:none;text-align:left;border-radius:9px;background:rgba(255,255,255,.02)}
+  .guide-sec{background:#08080d;padding:6rem 1.5rem}
+  .guide-wrap{max-width:1100px}
+  .sec-head{text-align:left;border-left:2px solid #8f86ff;padding-left:1rem;margin-bottom:2.5rem}
+  .sec-head .tag{font-size:.66rem;letter-spacing:3px;color:#9b93ff}
+  .sec-head h2{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.5px}
+  .sec-head p{margin:.7rem 0 0;max-width:700px}
+  .guide-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+  .guide-card{border-radius:10px;background:rgba(14,14,20,.8);border-color:rgba(255,255,255,.07);padding:1.35rem}
+  .guide-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+  .guide-card .gc-hand{width:100%;height:160px;border-radius:8px;margin-bottom:1rem;background:linear-gradient(135deg,rgba(255,255,255,.03),rgba(139,128,255,.05));font-size:0}
+  .guide-card .gc-hand img{width:100%;height:100%;object-fit:cover;filter:grayscale(.15) contrast(1.08);opacity:.9}
+  .guide-card .gc-hand::after{box-shadow:inset 0 0 30px var(--dc,rgba(179,136,255,.25));}
+  .guide-card .gc-count{font-size:.62rem;letter-spacing:1.8px}
+  .guide-card h3{font-size:1.1rem}.guide-card .gc-kanji{font-size:.8rem}.guide-card p{font-size:.82rem;line-height:1.7}.guide-card .gc-sign{font-size:.74rem}
+  footer{background:#050507;border-top-color:rgba(255,255,255,.07)}
+  @media(max-width:700px){.hero{min-height:78vh}.guide-grid{grid-template-columns:1fr}.manual-row{justify-content:center}}
 </style>
 </head>
 <body>
@@ -402,10 +442,10 @@
   <div class="hero-bg"></div>
   <div class="kicker">領域展開 · Casting Chamber</div>
   <h1>DOMAIN EXPANSION<br>SIMULATOR</h1>
-  <p class="sub">Show your hand to the camera. The hand sign you form determines the Domain Expansion you cast — and the camera responds. The browser tracks your hand live, overlays the landmarks, and turns the selected character's cursed energy into feedback. Form the seal, hold it, and watch the domain manifest.</p>
+  <p class="sub">Choose a Domain, then use the camera as a seal-practice mirror. The browser tracks your hand and overlays the landmarks; it does not pretend a generic hand-pose model can identify manga-specific seals without a trained classifier.</p>
   <div class="cta">
-    <button class="btn btn-primary" id="scStartBtn">⚡ Activate Camera</button>
-    <a href="#guide" class="btn btn-ghost">Learn the Hand Signs</a>
+    <button class="btn btn-primary" id="scStartBtn">Activate Camera</button>
+    <a href="#guide" class="btn btn-ghost">View Seal References</a>
   </div>
 </header>
 
@@ -438,7 +478,7 @@
         <span id="camStatus">Camera offline</span>
       </div>
       <div class="fingers">
-        HAND SIGN → <b id="fingerCount">–</b>
+        TRACKING → <b id="fingerCount">–</b>
       </div>
       <div class="fingers">
         DOMAIN → <b id="domainName">–</b>
@@ -467,7 +507,7 @@
         <div class="big">領域展開</div>
         <h3>Awaiting Your Hand Seal</h3>
         <p>Activate the camera, then form a hand sign in front of it.<br>Hold the seal to manifest the domain.</p>
-        <div class="hint">✋ Practice the seal · hold steady · cast manually</div>
+        <div class="hint">Select a Domain · reference its seal · practice with camera</div>
       </div>
     </div>
 
@@ -488,8 +528,8 @@
   <div class="guide-wrap">
     <div class="sec-head">
       <div class="tag">The Seals</div>
-      <h2>Hand Signs & Their Domains</h2>
-      <p>In jujutsu, the hands seal the technique. The camera tracks your hand in the browser and turns the live pose into cursed-energy feedback. The simulator intentionally does not claim that simple finger counting is the canon JJK hand-sign recognition model.</p>
+      <h2>Domain Seal Reference</h2>
+      <p>The references below use the documented Domain seals as shown in the manga/anime. The camera is a visual practice aid, not a canon-seal classifier. If a future model is trained specifically on these seals, it can be added without changing the archive structure.</p>
     </div>
     <div class="guide-grid" id="guideGrid">
       <!-- cards injected by JS -->
@@ -499,7 +539,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="logo">呪術廻戦 · DOMAIN EXPANSION SIMULATOR</div>
+  <div class="logo">呪術廻戦 · DOMAIN LAB</div>
   <p>A fan-made simulator. All characters, images, and lore belong to Gege Akutami and their respective owners.</p>
 </footer>
 
@@ -509,8 +549,7 @@
 /* =========================================================
    DOMAIN EXPANSION SIMULATOR
    - MediaPipe HandLandmarker (in-browser, TensorFlow Lite / WASM)
-   - Hand sign (finger count) → Domain Expansion mapping
-   - Dope camera effects + high-quality character reveal
+    - Dope camera effects + high-quality character reveal
    ========================================================= */
 
 /* ---------- DOMAIN DATABASE ---------- */
