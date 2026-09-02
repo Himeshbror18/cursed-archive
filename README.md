@@ -253,6 +253,17 @@ The lore pages were reviewed against reference material for Domain Expansion mec
 
 The Season 2 section was also corrected to remove the misplaced **200% Hollow Purple** claim; that attack belongs to the later Shinjuku Showdown, not the Shibuya Incident.
 
+The Season 2 page now distinguishes the **seven original Culling Game rules** from later additions. They are not seven general rules of jujutsu; they are the initial rules governing the Culling Game. A later rule added a 19-day score-change condition.
+
+## Support the project
+
+If this archive is useful and you want to help keep it maintained, there are two direct options:
+
+- **Ko-fi:** https://ko-fi.com/himanshu18
+- **GitHub Sponsors:** https://github.com/sponsors/Himeshbror18 (requires the maintainer profile to be approved and activated)
+
+Donations are optional. The project remains usable without them.
+
 ## Credits
 
 - **Jujutsu Kaisen**, its characters, artwork, terminology, and story belong to **Gege Akutami** and the respective rights holders.
