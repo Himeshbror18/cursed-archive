@@ -388,7 +388,7 @@
   <div class="hero-bg"></div>
   <div class="kicker">領域展開 · Casting Chamber</div>
   <h1>DOMAIN EXPANSION<br>SIMULATOR</h1>
-  <p class="sub">Show your hand to the camera. The hand sign you form determines the Domain Expansion you cast — and the camera responds. Form the seal, hold it, and watch the domain manifest.</p>
+  <p class="sub">Show your hand to the camera. The hand sign you form determines the Domain Expansion you cast — and the camera responds. A local Real-time-GesRec bridge can perform temporal gesture recognition; the browser landmark detector remains as a fallback. Form the seal, hold it, and watch the domain manifest.</p>
   <div class="cta">
     <button class="btn btn-primary" id="scStartBtn">⚡ Activate Camera</button>
     <a href="#guide" class="btn btn-ghost">Learn the Hand Signs</a>
@@ -424,7 +424,7 @@
         <span id="camStatus">Camera offline</span>
       </div>
       <div class="fingers">
-        HAND SIGN → <b id="fingerCount">–</b> fingers
+        HAND SIGN → <b id="fingerCount">–</b>
       </div>
       <div class="fingers">
         DOMAIN → <b id="domainName">–</b>
@@ -476,7 +476,7 @@
     <div class="sec-head">
       <div class="tag">The Seals</div>
       <h2>Hand Signs & Their Domains</h2>
-      <p>In jujutsu, the hands seal the technique. Raise the finger count shown below to summon that domain. Click any card to cast it manually.</p>
+      <p>In jujutsu, the hands seal the technique. With the optional Real-time-GesRec bridge, the simulator recognizes the trained hand-sign motion rather than pretending every seal is just a finger count. Browser landmark counting remains available as a lightweight fallback.</p>
     </div>
     <div class="guide-grid" id="guideGrid">
       <!-- cards injected by JS -->
@@ -553,6 +553,10 @@ let lastFingerCount = -1;
 let stableSince = 0;
 let handDetector = null;
 let cameraStream = null;
+let gestureBackend = 'offline';
+let gesturePollTimer = null;
+let gestureSending = false;
+const GESTURE_API = 'http://127.0.0.1:8765';
 let camRunning = false;
 let lastVideoTime = -1;
 let rafId = null;
@@ -569,6 +573,11 @@ const domainDisplay = $('domainDisplay'), ddInner = $('ddInner'), ddPlaceholder 
 const ddCharImg = $('ddCharImg'), ddKanjiBg = $('ddKanjiBg');
 const ddCharacterName = $('ddCharacterName');
 const fingerCountEl = $('fingerCount'), domainNameEl = $('domainName');
+const backendBadge = document.createElement('div');
+backendBadge.id = 'backendBadge';
+backendBadge.style.cssText = 'position:absolute;top:14px;right:14px;z-index:20;padding:.35rem .7rem;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(5,5,12,.72);backdrop-filter:blur(8px);font:700 .68rem Segoe UI,sans-serif;letter-spacing:1px;color:#8a8aa5';
+backendBadge.textContent = 'HAND ENGINE · browser fallback';
+stageFrame.appendChild(backendBadge);
 const toast = $('toast');
 
 /* ---------- BUILD GUIDE CARDS ---------- */
@@ -631,6 +640,17 @@ function playBoom(){
 }
 
 /* ---------- DOMAIN ACTIVATION ---------- */
+function triggerCharacterFX(d){
+  const bursts = d.idx === 4 ? 16 : d.idx === 2 ? 14 : d.idx === 3 ? 12 : 10;
+  for(let i=0;i<bursts;i++){
+    const p=spawnParticle();
+    p.x=fx.width/2+(Math.random()-.5)*220; p.y=fx.height/2+(Math.random()-.5)*180;
+    p.vx=(Math.random()-.5)*(d.idx===4?9:5); p.vy=(Math.random()-.5)*(d.idx===3?3:8);
+    p.r=1.5+Math.random()*(d.idx===5?7:4); p.decay=.012+Math.random()*.012; p.color=d.color;
+    particles.push(p);
+  }
+}
+
 function triggerDomain(idx, manual = false){
   const d = DOMAINS[idx];
   const prev = activeDomain;
@@ -686,6 +706,7 @@ function triggerDomain(idx, manual = false){
   domainDisplay.classList.add('active');
 
   domainNameEl.textContent = d.name;
+  triggerCharacterFX(d);
 }
 
 /* ---------- FINGER COUNT DETECTION ---------- */
@@ -824,25 +845,60 @@ function drawFX(){
 }
 drawFX();
 
-/* ---------- HAND SIGNAL LOOP ---------- */
-function onVideoFrame(){
-  if(!handDetector || !camRunning) return;
-  if(cam.currentTime === lastVideoTime) { rafId = requestAnimationFrame(onVideoFrame); return; }
-  lastVideoTime = cam.currentTime;
-
+/* ---------- REAL-TIME-GESREC BRIDGE ---------- */
+async function probeGestureBackend(){
   try{
-    const res = handDetector.detectForVideo(cam, performance.now());
-    if(res.landmarks && res.landmarks.length > 0){
-      const lm = res.landmarks[0];
-      const count = countFingers(lm);
-      onFingerCount(count);
-    }else{
-      onFingerCount(-1);
-      fingerCountEl.textContent = '–';
-    }
-  }catch(e){}
+    const r = await fetch(GESTURE_API + '/health', {signal: AbortSignal.timeout(500)});
+    if(!r.ok) throw new Error('offline');
+    gestureBackend = 'gesrec';
+    backendBadge.textContent = 'HAND ENGINE · Real-time-GesRec';
+    backendBadge.style.color = '#69f0ae';
+    return true;
+  }catch(e){
+    gestureBackend = 'browser';
+    backendBadge.textContent = 'HAND ENGINE · browser fallback';
+    backendBadge.style.color = '#8a8aa5';
+    return false;
+  }
+}
 
-  rafId = requestAnimationFrame(onVideoFrame);
+async function sendGestureFrame(){
+  if(!camRunning || gestureSending || gestureBackend !== 'gesrec' || cam.readyState < 2) return;
+  gestureSending = true;
+  try{
+    const c = document.createElement('canvas'); c.width=480; c.height=270;
+    c.getContext('2d').drawImage(cam,0,0,c.width,c.height);
+    const image = c.toDataURL('image/jpeg', .68);
+    const r = await fetch(GESTURE_API + '/predict', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:image})});
+    const data = await r.json();
+    if(data.ready){
+      fingerCountEl.textContent = Math.round(data.confidence*100) + '%';
+      if(data.mapped && data.confidence >= .72){
+        const mapped = DOMAINS[data.domain_idx];
+        if(mapped && (!activeDomain || activeDomain.idx !== mapped.idx)) triggerDomain(mapped.idx);
+      }
+    } else fingerCountEl.textContent = 'warming…';
+  }catch(e){
+    gestureBackend='browser'; backendBadge.textContent='HAND ENGINE · browser fallback'; backendBadge.style.color='#8a8aa5';
+  }finally{ gestureSending=false; }
+}
+
+/* ---------- BROWSER FALLBACK ---------- */
+function onVideoFrame(){
+  if(!camRunning || gestureBackend !== 'browser' || !handDetector) return;
+  if(cam.currentTime === lastVideoTime){ requestAnimationFrame(onVideoFrame); return; }
+  lastVideoTime = cam.currentTime;
+  try{
+    const res=handDetector.detectForVideo(cam,performance.now());
+    if(res.landmarks && res.landmarks.length>0) onFingerCount(countFingers(res.landmarks[0]));
+    else { onFingerCount(-1); fingerCountEl.textContent='–'; }
+  }catch(e){}
+  requestAnimationFrame(onVideoFrame);
+}
+
+function startGesturePolling(){
+  clearInterval(gesturePollTimer);
+  gesturePollTimer=setInterval(sendGestureFrame,140);
 }
 
 /* ---------- CAMERA ---------- */
@@ -859,6 +915,9 @@ async function startCamera(){
     $('scStartBtn').textContent = '📷 Camera Active';
     cam.style.opacity = 1;
     initAudio();
+    await probeGestureBackend();
+    if(gestureBackend === 'gesrec') startGesturePolling();
+    else if(handDetector) requestAnimationFrame(onVideoFrame);
   }catch(e){
     $('camStatus').textContent = 'Camera denied — using manual casting';
     enterManualMode();
@@ -872,6 +931,8 @@ function stopCamera(){
     cameraStream = null;
   }
   camRunning = false;
+  clearInterval(gesturePollTimer);
+  gesturePollTimer = null;
   $('camDot').classList.remove('on');
   $('camStatus').textContent = 'Camera offline';
   $('scStartBtn').textContent = '⚡ Activate Camera';
