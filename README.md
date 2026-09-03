@@ -260,7 +260,7 @@ The Season 2 page now distinguishes the **seven original Culling Game rules** fr
 If this archive is useful and you want to help keep it maintained, there are two direct options:
 
 - **Ko-fi:** https://ko-fi.com/himanshu18
-- **GitHub Sponsors:** https://github.com/sponsors/Himeshbror18 (requires the maintainer profile to be approved and activated)
+- **GitHub:** https://github.com/0xMarrow
 
 Donations are optional. The project remains usable without them.
 
@@ -268,7 +268,8 @@ Donations are optional. The project remains usable without them.
 
 - **Jujutsu Kaisen**, its characters, artwork, terminology, and story belong to **Gege Akutami** and the respective rights holders.
 - This repository is a fan-made project and is not affiliated with the official franchise.
-- Maintained by **HIMESH BROR**.
+- Maintained by **HB (Himesh Bror)**.
+- GitHub: [0xMarrow](https://github.com/0xMarrow)
 - Support: [Ko-fi](https://ko-fi.com/himanshu18)
 
 ## License
