@@ -1,55 +1,22 @@
 /* Cursed Archive — second art-direction pass: flatter surfaces, editorial motion, sharper perception. */
-:root{--finish-edge:rgba(255,255,255,.11);--finish-paper-shadow:rgba(17,18,24,.12);--finish-transition:cubic-bezier(.16,1,.3,1)}
-
-/* Kill the muddy gradient language. Keep the palette; make surfaces intentional and flat. */
+:root{--finish-edge:rgba(255,255,255,.11);--finish-paper-shadow:rgba(17,18,24,.12);--finish-transition:cubic-bezier(.16,1,.3,1);--cursor-size:22px}
 body{background-image:none!important}
-.hero-media:before{background:rgba(6,7,15,.62)!important}
-.hero-media:after{background:rgba(7,7,9,.3)!important}
-.section.dark{background:var(--ink)!important}
-.system-copy{background:var(--ink-raised)!important}
-.system-graphic{background:#e7e1d6!important}
-.section.dark .section-head:after,.section.paper .section-head:after{background:currentColor!important}
-.domain-card:before{background:var(--accent)!important;opacity:.12!important}
-.domain-card:hover:before{opacity:.2!important}
-
-/* Make the existing panels feel more like printed plates than generic cards. */
+.hero-media:before{background:rgba(6,7,15,.62)!important}.hero-media:after{background:rgba(7,7,9,.3)!important}
+.section.dark{background:var(--ink)!important}.system-copy{background:var(--ink-raised)!important}.system-graphic{background:#e7e1d6!important}
+.section.dark .section-head:after,.section.paper .section-head:after{background:currentColor!important}.domain-card:before{background:var(--accent)!important;opacity:.12!important}.domain-card:hover:before{opacity:.2!important}
 .system-poster,.cast-feature,.cast-mini,.domain-card,.incident-grid,.support-frame{box-shadow:0 1px 0 rgba(255,255,255,.045) inset,0 20px 55px rgba(2,4,15,.1)}
-.system-poster,.incident-grid{border:1px solid rgba(255,255,255,.08)}
-.cast-feature{isolation:isolate}
-.cast-feature,.domain-card,.system-poster,.incident-grid,.support-frame{will-change:transform}
+.system-poster,.incident-grid{border:1px solid rgba(255,255,255,.08)}.cast-feature{isolation:isolate}
+.system-poster,.incident-grid,.support-frame,.domain-card,.cast-feature{will-change:transform}
 .system-poster,.incident-grid,.support-frame{transition:transform .7s var(--finish-transition),box-shadow .7s ease}
 .system-poster:hover,.incident-grid:hover,.support-frame:hover{transform:translateY(-6px)}
-
-/* Editorial registration marks + a slim scroll indicator. */
-.section{--mark:rgba(17,18,24,.18)}
-.section.dark{--mark:rgba(255,255,255,.12)}
-.section:before{content:"";position:absolute;top:30px;left:max(20px,7vw);width:30px;height:30px;border-top:1px solid var(--mark);border-left:1px solid var(--mark);pointer-events:none}
-.section:after{content:"";position:absolute;bottom:30px;right:max(20px,7vw);width:30px;height:30px;border-bottom:1px solid var(--mark);border-right:1px solid var(--mark);pointer-events:none}
-nav{box-shadow:0 10px 30px rgba(0,0,0,.12)}
-nav:after{content:"";position:absolute;left:0;bottom:-1px;width:100%;height:2px;background:var(--violet);transform:scaleX(var(--scroll-progress,0));transform-origin:left center}
-.nav a{position:relative}
-.nav a:after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:center;transition:transform .3s var(--finish-transition);opacity:.7}
-.nav a:hover:after,.nav a.active:after{transform:scaleX(1)}
-
-/* Better image perception: less wash, more deliberate movement. */
-.cast-feature img,.domain-card img{backface-visibility:hidden;transform-origin:center center}
-.cast-feature .bigname,.domain-copy{text-shadow:0 2px 18px rgba(0,0,0,.18)}
-.cast-feature:hover img{transform:scale(1.035) translate3d(0,-8px,0)!important}
-.domain-card:hover{box-shadow:0 24px 70px rgba(2,4,15,.3),0 0 0 1px rgba(255,255,255,.12);transform:translateY(-12px) rotateX(1deg)}
-
-/* Micro-detail that reads as print registration instead of decoration overload. */
-.system-point,.mini,.domain-meta span{transition:border-color .3s ease,color .3s ease,transform .3s ease}
-.system-point:hover{transform:translateX(4px)}
-.mini:hover{transform:translateY(-3px)}
-
-/* Scroll-reveal: content enters in small editorial steps, not pop-in cards. */
-.js-reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .9s var(--finish-transition)}
-.js-reveal.is-visible{opacity:1;transform:none}
-.js-reveal[data-delay="1"]{transition-delay:.08s}.js-reveal[data-delay="2"]{transition-delay:.16s}.js-reveal[data-delay="3"]{transition-delay:.24s}
-
-/* Fine-pointer cursor marker. No glow, no trail, just a quiet instrument-like cue. */
-@media (pointer:fine){body.js-pointer:after{content:"";position:fixed;z-index:120;left:var(--mx,50vw);top:var(--my,40vh);width:22px;height:22px;border:1px solid rgba(255,255,255,.55);transform:translate(-50%,-50%) rotate(45deg);pointer-events:none;transition:width .2s ease,height .2s ease,opacity .2s ease;opacity:.72}.js-pointer a:hover~*,.js-pointer button:hover~*{cursor:none}}
-
-/* Respect reduced motion and keep mobile editorial rather than ornamental. */
+.section{--mark:rgba(17,18,24,.18)}.section.dark{--mark:rgba(255,255,255,.12)}
+.section:before{content:"";position:absolute;top:30px;left:max(20px,7vw);width:30px;height:30px;border-top:1px solid var(--mark);border-left:1px solid var(--mark);pointer-events:none}.section:after{content:"";position:absolute;bottom:30px;right:max(20px,7vw);width:30px;height:30px;border-bottom:1px solid var(--mark);border-right:1px solid var(--mark);pointer-events:none}
+nav{box-shadow:0 10px 30px rgba(0,0,0,.12)}nav:after{content:"";position:absolute;left:0;bottom:-1px;width:100%;height:2px;background:var(--violet);transform:scaleX(var(--scroll-progress,0));transform-origin:left center}
+.nav a{position:relative}.nav a:after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:center;transition:transform .3s var(--finish-transition);opacity:.7}.nav a:hover:after,.nav a.active:after{transform:scaleX(1)}
+.cast-feature img,.domain-card img{backface-visibility:hidden;transform-origin:center center}.cast-feature .bigname,.domain-copy{text-shadow:0 2px 18px rgba(0,0,0,.18)}
+.cast-feature:hover img{transform:scale(1.035) translate3d(0,-8px,0)!important}.domain-card:hover{box-shadow:0 24px 70px rgba(2,4,15,.3),0 0 0 1px rgba(255,255,255,.12);transform:translateY(-12px) rotateX(1deg)}
+.system-point,.mini,.domain-meta span{transition:border-color .3s ease,color .3s ease,transform .3s ease}.system-point:hover{transform:translateX(4px)}.mini:hover{transform:translateY(-3px)}
+.js-reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .9s var(--finish-transition)}.js-reveal.is-visible{opacity:1;transform:none}.js-reveal[data-delay="1"]{transition-delay:.08s}.js-reveal[data-delay="2"]{transition-delay:.16s}.js-reveal[data-delay="3"]{transition-delay:.24s}
+@media(pointer:fine){body.js-pointer:after{content:"";position:fixed;z-index:120;left:var(--mx,50vw);top:var(--my,40vh);width:var(--cursor-size,22px);height:var(--cursor-size,22px);border:1px solid rgba(255,255,255,.55);transform:translate(-50%,-50%) rotate(45deg);pointer-events:none;transition:width .2s ease,height .2s ease,opacity .2s ease;opacity:.72}body.js-pointer[data-pointer-hot="1"]:after{opacity:.95}}
 @media(max-width:620px){.section{padding-top:105px;padding-bottom:105px}.section:before{top:18px}.section:after{bottom:18px}.system-poster:hover,.incident-grid:hover,.support-frame:hover,.domain-card:hover{transform:none}.nav a:after{display:none}.js-reveal{opacity:1;transform:none;transition:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.system-poster,.incident-grid,.support-frame,.domain-card,.js-reveal{transition:none}.nav a:after{transition:none}.js-reveal{opacity:1;transform:none}.hero-media img{animation:none}}
