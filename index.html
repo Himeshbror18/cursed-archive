@@ -32,6 +32,7 @@ footer{padding:26px max(20px,7vw);background:#090a12;border-top:1px solid var(--
 @media(max-width:620px){nav{height:58px}.nav{gap:13px}.nav a:nth-child(-n+2){display:none}.hero-inner{padding:13vh 18px 8vh}.hero h1{font-size:clamp(4.3rem,21vw,7rem)}.hero h1 span{margin-left:10vw}.hero-meta{gap:15px}.hero-index{display:none}.section{padding:90px 18px}.section-head{margin-bottom:48px}.system-copy{padding:34px 26px}.system-points{grid-template-columns:1fr}.system-point:nth-child(odd){border-right:0;padding-right:0}.system-point:nth-child(even){padding-left:0}.system-graphic{min-height:360px;padding:26px}.system-graphic .kanji{font-size:6rem}.cast-feature{min-height:480px}.cast-mini{grid-template-columns:1fr}.mini,.mini:nth-child(2n){border-right:0;border-bottom:1px solid rgba(11,11,13,.14)}.domain-card{min-height:430px;padding:24px}.domain-copy{left:24px;right:24px;bottom:24px}.domain-title{font-size:2.6rem}.incident-copy{padding:32px 26px}.support-frame{padding:34px 26px;min-height:390px;display:block}.support-actions{margin-top:25px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.tilt{transform:none!important}}
 </style>
+  <link rel="stylesheet" href="assets/archive-finish.css">
 </head>
 <body>
 <canvas id="particles"></canvas>
@@ -79,5 +80,6 @@ const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');le
 const reveals=document.querySelectorAll('.reveal');const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});reveals.forEach(e=>io.observe(e));
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('.tilt').forEach(el=>el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform=`perspective(1100px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*5).toFixed(2)}deg)`;el.style.transition='transform .08s linear'}));document.querySelectorAll('.tilt').forEach(el=>el.addEventListener('pointerleave',()=>{el.style.transform='';el.style.transition='transform .6s cubic-bezier(.2,.75,.2,1)'}))}
 </script>
+  <script src="assets/archive-finish.js"></script>
 </body>
 </html>
