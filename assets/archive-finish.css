@@ -1,0 +1,34 @@
+/* Cursed Archive — finishing layer: restrained depth, panel hierarchy, and perceptual contrast. */
+:root{--finish-glow:rgba(129,112,255,.18);--finish-edge:rgba(255,255,255,.1);--finish-paper-shadow:rgba(17,18,24,.12)}
+/* Fine framing: makes major content read as deliberate panels without turning the page into cards everywhere. */
+.system-poster,.cast-feature,.cast-mini,.domain-card,.incident-grid,.support-frame{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 55px rgba(2,4,15,.08)}
+.system-poster,.incident-grid{border:1px solid rgba(255,255,255,.07)}
+.cast-feature{isolation:isolate}
+.cast-feature:after,.domain-card:after{pointer-events:none}
+/* Perceptual hierarchy: dark panels recede, active accents advance. */
+.section.dark .section-head{position:relative}
+.section.dark .section-head:after{content:"";position:absolute;left:0;bottom:-22px;width:72px;height:2px;background:linear-gradient(90deg,var(--violet),transparent);opacity:.8}
+.section.paper .section-head:after{content:"";display:block;width:72px;height:2px;margin-top:22px;background:linear-gradient(90deg,#5c4dd0,transparent);opacity:.65}
+/* Quiet glass layer for navigation; readable first, decorative second. */
+nav{box-shadow:0 8px 32px rgba(0,0,0,.16)}
+.nav a{position:relative}
+.nav a:after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:center;transition:transform .28s ease;opacity:.7}
+.nav a:hover:after,.nav a.active:after{transform:scaleX(1)}
+/* Image edge treatment prevents photographs from visually swallowing typography. */
+.cast-feature:before,.domain-card:before{z-index:1}
+.cast-feature .bigname,.domain-copy{ text-shadow:0 2px 18px rgba(0,0,0,.2)}
+/* Soft chromatic bloom: visible at the edge of panels, not as a neon wash. */
+.domain-card:hover:before{opacity:.34}
+.domain-card:hover{box-shadow:0 20px 70px rgba(2,4,15,.42),0 0 0 1px color-mix(in srgb,var(--accent) 35%,transparent)}
+.cast-feature:hover{box-shadow:0 24px 65px rgba(2,4,15,.18)}
+/* Editorial dividers / registration marks. */
+.section{--mark:rgba(17,18,24,.16)}
+.section.dark{--mark:rgba(255,255,255,.11)}
+.section:before{content:"";position:absolute;top:32px;left:max(20px,7vw);width:28px;height:28px;border-top:1px solid var(--mark);border-left:1px solid var(--mark);pointer-events:none}
+.section:after{content:"";position:absolute;bottom:32px;right:max(20px,7vw);width:28px;height:28px;border-bottom:1px solid var(--mark);border-right:1px solid var(--mark);pointer-events:none}
+/* Subtle hover lift on the archive's main visual units. */
+.system-poster,.incident-grid,.support-frame{transition:transform .55s cubic-bezier(.2,.75,.2,1),box-shadow .55s ease}
+.system-poster:hover,.incident-grid:hover,.support-frame:hover{transform:translateY(-4px)}
+/* Mobile: remove decorative framing where it competes with content. */
+@media(max-width:620px){.section{padding-top:105px;padding-bottom:105px}.section:before{top:18px}.section:after{bottom:18px}.system-poster:hover,.incident-grid:hover,.support-frame:hover{transform:none}.nav a:after{display:none}}
+@media(prefers-reduced-motion:reduce){.system-poster,.incident-grid,.support-frame{transition:none}.nav a:after{transition:none}}
